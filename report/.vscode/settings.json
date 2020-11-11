@@ -1,0 +1,4 @@
+{
+  "git.ignoreLimitWarning": true,
+  "latex-workshop.latex.outDir": "%DIR%/aux"
+}

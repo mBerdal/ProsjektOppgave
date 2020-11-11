@@ -1,5 +1,5 @@
 # Fdb version 3
-["bibtex aux/main"] 1605083530 "aux/main.aux" "aux/main.bbl" "aux/main" 1605086876
+["bibtex aux/main"] 1605083530 "aux/main.aux" "aux/main.bbl" "aux/main" 1605087234
   "./IEEEtran.bst" 1604999561 57747 3d527d22adcaa16ca0abd0879d6fab1f ""
   "aux/background.aux" 1605083862 846 237d4ab651f40a43c13f21d63f83008f ""
   "aux/disc.aux" 1605083862 843 8ba1892a30a4e4e433f08307720cea3d ""
@@ -15,8 +15,9 @@
   (generated)
   "aux/main.bbl"
   "aux/main.blg"
-["pdflatex"] 1605083861 "/home/magnusb96/Desktop/5th_year_project/oppgave_tekst/main.tex" "aux/main.pdf" "main" 1605086876
+["pdflatex"] 1605083861 "/home/magnusb96/Desktop/5th_year_project/ProsjektOppgave/report/main.tex" "aux/main.pdf" "main" 1605087234
   "/etc/texmf/web2c/texmf.cnf" 1539262882 475 c0e671620eb5563b2130f56340a5fde8 ""
+  "/home/magnusb96/Desktop/5th_year_project/ProsjektOppgave/report/main.tex" 1605023310 1231 3b6334fe46abf7195a9d335a7528f189 ""
   "/home/magnusb96/Desktop/5th_year_project/oppgave_tekst/main.tex" 1605023310 1231 3b6334fe46abf7195a9d335a7528f189 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
@@ -181,20 +182,20 @@
   "impl.tex" 1604997842 24 a419fda426f08be81db75c43187976c2 ""
   "intro.tex" 1605000152 69 1cc9e20eeda9364d51abe428bcc8e5e9 ""
   "main.tex" 1605023310 1231 3b6334fe46abf7195a9d335a7528f189 ""
-  "prob_form.tex" 1605086876 1193 be7083506061a04445460837ad178184 ""
+  "prob_form.tex" 1605087233 1193 be7083506061a04445460837ad178184 ""
   "sim_res.tex" 1604997842 28 8f30f552d90d812e8498c0371e9cfbff ""
   "sys_descr.tex" 1605081718 4722 b4fe33fd0e316fa79e1b4763ed384c33 ""
   (generated)
   "aux/main.log"
+  "aux/prob_form.aux"
+  "aux/main.out"
   "aux/impl.aux"
+  "aux/sys_descr.aux"
   "aux/sim_res.aux"
   "aux/main.pdf"
   "aux/main.aux"
-  "aux/main.out"
-  "aux/fut_work.aux"
-  "aux/intro.aux"
-  "aux/disc.aux"
-  "aux/sys_descr.aux"
-  "aux/background.aux"
   "aux/main.toc"
-  "aux/prob_form.aux"
+  "aux/fut_work.aux"
+  "aux/disc.aux"
+  "aux/intro.aux"
+  "aux/background.aux"
