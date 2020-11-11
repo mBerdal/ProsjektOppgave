@@ -1,0 +1,17 @@
+\section{Problem formulation}
+
+\subsection{Trilateration}
+Given three agents with know positions $\mathbf{s}_{i}\in\mathbb{R}^{2},\;i=0, 1, 2$, the location 
+of a beacon, denoted by $\mathbf{x}$, can be determined as follows:
+\begin{enumerate}
+  \item The beacon pings agents at $\mathbf{s}_{i},\;i=0, 1, 2$ and starts three timers $t_{i},\;i=0, 1, 2$.
+  \item When the agents receive the ping, they instantly respond with a packet containing $\mathbf{s}_{i}$.
+  \item When receiving the packet from agent ${i}$, the beacon stops timer $t_{i}$ and calculates the distance
+  from itself to agent $i$: $d_{i} = \frac{1}{2}ct_{i}$, where $c$ is the speed of light. The factor $\frac{1}{2}$ is due to the signal traveling
+  two times the distance between the beacon and agent $i$ (the ping travels from the beacon to the agent, and the packet
+  sent by the agent travels back again).
+  \item Based on the distances $d_{i},\;i=0, 1, 2$ and the positions of the agents $\mathbf{s}_{i},\;i=0, 1, 2$ the beacon can
+  determine its position by calculating the point where circles centered at $\mathbf{s}_{i},\;i=0, 1, 2$ with radii $d_{i},\;i=0, 1, 2$ intersect.
+\end{enumerate}
+
+\subsection{Coverage}

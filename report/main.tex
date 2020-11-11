@@ -1,0 +1,49 @@
+%% This is the main file and you use this file to organize your assignment.
+
+\documentclass[a4paper]{article}	  
+\usepackage{geometry} 	   % Choose your margin here. 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{todonotes}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\figref}[1]{\figurename~\ref{#1}}
+
+\let\endtitlepage\relax	% Begin the text immidiately after the title page. Optional
+\setlength{\parindent}{0cm}				% Start paragraph without indent. Optional
+
+\begin{document}
+
+\begin{titlepage}
+\begin{center}
+\Large Semesteroppgave \\
+\vspace{10pt}
+\Large CrazyFlie triangulation network\\
+\vspace{10pt}
+\large Magnus Berdal
+\end{center}
+\end{titlepage}
+\clearpage
+\tableofcontents
+% Use "\include" instead of "\input" if you want the section to start on a new page.
+\include{intro}
+\include{background}
+\include{sys_descr}
+\include{prob_form}
+\include{impl}
+\include{sim_res}
+\include{disc}
+\include{fut_work}
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography.bib}
+
+\end{document}
