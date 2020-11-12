@@ -24,49 +24,61 @@ penetrate the boundary of an obstacle. Due to this, once an entity is inside $\O
 $\Omega$ and outside $\mathrm{int}(o)\;\forall\;o\in\mathcal{O}$. From this we define the \textit{feasible space}, $\mathcal{F}$, as
 all points where it is possible to place an entity:
 \begin{equation}\label[eq]{feasible_space_def}
-  \mathcal{F} = \{\mathbf{x}\in\mathbb{R}^{2}: \mathbf{x}\in\Omega,\;\mathbf{x}\notin\mathrm{int}(o)\;\forall\;o\in\mathcal{O}\} = \Omega\setminus\bigcup_{o\in\mathcal{O}}\mathrm{int}(o)
+  \mathcal{F} = \{\mathbf{y}\in\mathbb{R}^{2}: \mathbf{y}\in\Omega,\;\mathbf{y}\notin\mathrm{int}(o)\;\forall\;o\in\mathcal{O}\} = \Omega\setminus\bigcup_{o\in\mathcal{O}}\mathrm{int}(o)
 \end{equation}
 
 \subsection{Agent}
-An \textit{agent}, denoted by an integer $i$, is described by its position $\mathbf{s}_{i}\in\mathbb{R}^{2}$ and 
-it's maximum radius of communication, $r_{i}$.
-The probability of an agent $i$ being able to communicate with another entity positioned at a point $\mathbf{x}$ is defined according to:
-\todo{Find notation for $\mathbb{R}^{5}$ with non-negative values in last dimension}
+An \textit{agent}, denoted by an integer $a$, is defined by its position $\mathbf{x}_{a}\in\mathbb{R}^{2}$ and 
+its maximum range of communication $r_{a}$. From this we define the communication disk of agent $a$:
 \begin{equation}
-  \hat{p}:(\mathbb{R}^{2}, \mathbb{R}^{2}, \mathbb{R}^{+})\rightarrow [0, 1]\quad\hat{p}(\mathbf{s}_{i}, \mathbf{x}, r_{i}) = \begin{cases}
-    p(\norm{\mathbf{s}_{i}-\mathbf{x}}) &, \mathbf{x}\in V(\mathbf{s}_{i}, r_{i})\\
-    0 &, \mathbf{x}\in\mathbb{R}^{2}\setminus V(\mathbf{s}_{i}, r_{i})
+  D_{a} = \{\mathbf{y}\in\mathbb{R}^{2}: \norm{\mathbf{x}_{a} - \mathbf{y}}\leq r_{a}\}
+\end{equation}
+The probability of an agent $a$ being able to communicate with another entity positioned at a point $\mathbf{y}$, from now on called
+the local probability of agent $a$, is defined according to:
+\todo{Find notation for $\mathbb{R}^{5}$ with non-negative values in last dimension}
+\begin{equation}\label[eq]{local_prob}
+  \hat{p}:(\mathbb{R}^{2}, \mathbb{R}^{2}, \mathbb{R}^{+})\rightarrow [0, 1]\quad\hat{p}(\mathbf{x}_{a}, r_{a}, \mathbf{y}) = \begin{cases}
+    p(\norm{\mathbf{x}_{a}-\mathbf{y}}) &, \mathbf{y}\in V(\mathbf{x}_{a}, r_{a})\\
+    0 &, \mathbf{y}\in\mathbb{R}^{2}\setminus V(\mathbf{x}_{a}, r_{a})
   \end{cases}
 \end{equation}
-Where $V(\mathbf{s}_{i}, r_{i})$ denotes the \textit{visible set} of agent $i$. Assuming line-of-sight (LoS) communication, meaning an agent
+Where $V(\mathbf{x}_{a}, r_{a})$ denotes the \textit{visible set} of agent $i$. Assuming line-of-sight (LoS) communication, meaning an agent
 cannot communicate with an entity if there is an obstacle or a mission space wall between them, the visible set of agent 
 $i$ is defined in \eqref{visible_set_def}.
 \begin{equation}\label[eq]{visible_set_def}
-  V(\mathbf{s}_{i}, r_{i}) = \{\mathbf{x}\in\mathbb{R}^{2}:\norm{\mathbf{s}_{i}-\mathbf{x}}\leq r_{i}, \lambda\mathbf{x} + (1-\lambda)\mathbf{s}_{i}\in\mathcal{F}\;\forall\;0\leq\lambda\leq 1\}
+  V(\mathbf{x}_{a}, r_{a}) = \{\mathbf{y}\in\mathbb{R}^{2}:\mathbf{y}\in D_{a}, \lambda\mathbf{y} + (1-\lambda)\mathbf{x}_{a}\in\mathcal{F}\;\forall\;0\leq\lambda\leq 1\}
 \end{equation}
 An example of the visible set for an agent is show in \figref{vis_set_example}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{figs/vis_set_example.pdf}
-  \caption{Visible set (light blue) for the agent placed at $\mathbf{s}_{i}$ in a rectangular mission space $\Omega$ with two obstacles ($\mathcal{O} = \{o_{0}, o_{1}\}$)}
+  \caption{Visible set (light blue) for the agent placed at $\mathbf{x}_{a}$ in a rectangular mission space $\Omega$ with two obstacles ($\mathcal{O} = \{o_{0}, o_{1}\}$)}
   \label[fig]{vis_set_example}
 \end{figure}
+\todo{Update figure: $\mathbf{s}_{i}$ should be $\mathbf{x}_{a}$}
 \subsection{Swarm}
-A \textit{swarm} consists if $N$ discinct agents, each one denoted by an integer $i\in\mathcal{N}=\{0\hdots N-1\}$. The state of the swarm is described by the state of its participants 
-, and is expressed as vector $\mathbf{S}\in\mathbb{R}^{2N}$ as shown in \eqref{swarm_state_def}.
+A \textit{swarm}, $\mathcal{S}$ of size $N$ is a set of agents $\{a_{0}\hdots a_{N-1}\}$. The state of the swarm is described by the state of its participants 
+, and is expressed as vector $\mathbf{x}_{\mathcal{S}}\in\mathbb{R}^{2N}$ as shown in \eqref{swarm_state_def}.
 \begin{equation}\label[eq]{swarm_state_def}
-  \mathbf{S} = \begin{bmatrix}
-    \mathbf{s}_{0}\\\vdots\\\mathbf{s}_{N-1}
+  \mathbf{x}_{\mathcal{S}} = \begin{bmatrix}
+    \mathbf{x}_{a_{0}}\\\vdots\\\mathbf{x}_{a_{N-1}}
   \end{bmatrix}
 \end{equation}
 The maximum radii of communication of the swarm are represented as the vector $\mathbf{r}\in\mathbb{R}^{N}$ as shown in \eqref{swarm_radii_def}.
 \begin{equation}\label[eq]{swarm_radii_def}
-  \mathbf{r} = \begin{bmatrix}
-    r_{0}&\hdots&r_{N-1}
+  \mathbf{r}_{\mathcal{S}} = \begin{bmatrix}
+    r_{a_{0}}&\hdots&r_{a_{N-1}}
   \end{bmatrix}^{T}
 \end{equation}
-Assuming that the distributions for all agents are independent lets us use (7) in \cite{10.2307/24304959} to express 
-the probability of $n$ members in the swarm being able to communicate with an entity at a point $\mathbf{x}$:
+Assuming that the distributions for all agents in the swarm are independent lets us use (7) in \cite{10.2307/24304959} to express 
+the probability of $n$ members in the swarm, $\mathcal{S}$, being able to communicate with an entity at a point $\mathbf{y}$:
+\begin{equation}\label[eq]{Phi_def}
+  \Phi^{n}_{\mathcal{S}}(\mathbf{y}) = Pr(N_{com}(\mathcal{S}, \mathbf{y}) = n) = \sum_{A\in Comb(\mathcal{S}, n)}\prod_{a\in\mathcal{A}}\hat{p}(\mathbf{x}_{a}, \mathbf{y}, r_{a})\prod_{a\in\mathcal{S}\setminus\mathcal{A}}\big(1-\hat{p}(\mathbf{x}_{a}, \mathbf{y}, r_{a})\big)
+\end{equation}
+Later we will use the probability of \textit{at least} n members in a swarm beign able to communicate with an entity placed at $\mathbf{y}$, which is defined as:
 \begin{equation}
-  P(n, \mathbf{x}, \mathbf{S}, \mathbf{r}) = \sum_{A\in Comb(\mathcal{N}, n)}\Bigg(\prod_{i\in\mathcal{A}}\hat{p}(\mathbf{s}_{i}, \mathbf{x}, r_{i})\Bigg)\Bigg(\prod_{i\in\mathcal{N}\setminus\mathcal{A}}1-\hat{p}(\mathbf{s}_{i}, \mathbf{x}, r_{i})\Bigg)
+  \begin{split}
+    \Phi^{n^{+}}_{\mathcal{S}}(\mathbf{y}) &= Pr(N_{com}(\mathcal{S}, \mathbf{y}) \geq n) = 1 - \sum_{i=0}^{n-1}Pr(N_{com}(\mathcal{S}, \mathbf{y}) = i)\\
+    &= 1 - \sum_{i=0}^{n-1}\Phi^{i}_{\mathcal{S}}(\mathbf{y})
+  \end{split}
 \end{equation}
