@@ -1,5 +1,5 @@
 import numpy as np
-from helpers import get_s_i, get_s_bar_i, get_covered_polygon
+from helpers import get_x_a, get_x_N_sub_a, get_covered_polygon
 from itertools import combinations
 from scipy.optimize import minimize
 
@@ -55,6 +55,6 @@ class GlobalOpt():
   @staticmethod
   def close_dist_repell(s, n):
     _, w = s.shape
-    all_norms = np.array([np.linalg.norm(get_s_i(s, i) - get_s_bar_i(s, i), axis=0) for i in np.arange(w)])
+    all_norms = np.array([np.linalg.norm(get_x_a(s, i) - get_x_N_sub_a(s, i), axis=0) for i in np.arange(w)])
     n_nearest_indices = np.argpartition(all_norms, n-1, axis=1)[:, :n]
     return np.sum(np.exp((1-2.7*np.sum([all_norms[i, n_nearest_indices[i]] for i in np.arange(w)], axis=1))))

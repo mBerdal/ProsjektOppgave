@@ -1,1 +1,31 @@
 \section{Implementation}
+\subsection{Local probability}
+We assume that the agents have perfect communication capabilities within their maximum range. Thus we set
+\begin{equation}
+  \tilde{p}(\mathbf{x}_{a}, \mathbf{y}) = \begin{cases}
+    1, &\mathbf{y}\in\tilde{V}(\mathbf{x}_{a})\\
+    0, &\mathbf{y}\in\tilde{V}_{c}(\mathbf{x}_{a})
+  \end{cases} = 1_{\big\{\mathbf{y}\in\tilde{V}(\mathbf{x}_{a})\big\}}
+\end{equation}
+where $1_{\{\cdot\}}$ is the indicator function, which is simply equal to one if the clause in the subscript is true and zero otherwise.
+This implies that the global objective function \eqref{rewritten_objective} is simply the area of all points in $\mathcal{F}$ where at least three agents can communicate.
+
+\subsection{Computing the local objective function}
+We partition the neighbours of $a$ into two sets:
+\begin{subequations}
+  \begin{equation}
+    \mathcal{B}_{a\tilde{V}}(\mathbf{y}) = \{j\in\mathcal{B}_{a}: \mathbf{y}\in\tilde{V}(\mathbf{x}_{j})\}
+  \end{equation}
+  \begin{equation}
+    \mathcal{B}_{a\tilde{V}_{c}}(\mathbf{y}) = \{j\in\mathcal{B}_{a}: \mathbf{y}\in\tilde{V}_{c}(\mathbf{x}_{j})\}
+  \end{equation}
+\end{subequations}
+Now the local objective function can be written as:
+\begin{equation}
+  \begin{split}
+    \tilde{H}_{a}(\mathbf{x}_{\{a\}\cup\mathcal{B}_{a}}) &= \int_{V(\mathbf{x}_{a})}\Phi^{2}_{\mathcal{B}_{a}}(\mathbf{y})1_{\{\mathbf{y}\in\tilde{V}(\mathbf{x}_{a})\}}d\mathbf{y} = \int_{V(\mathbf{x}_{a})}\Phi^{2}_{\mathcal{B}_{a}}(\mathbf{y})d\mathbf{y}\\
+    &= \int_{V(\mathbf{x}_{a})}\sum_{n = 0}^{2} \Phi^{n}_{\mathcal{B}_{a\tilde{V}}}(\mathbf{y})\Phi^{2-n}_{\mathcal{B}_{a\tilde{V}_{c}}}(\mathbf{y})d\mathbf{y} = \int_{V(\mathbf{x}_{a})}\sum_{n = 0}^{2}1_{\{|B_{a\tilde{V}}(\mathbf{y})| = n\}}1_{\{2-n = 0\}}d\mathbf{y}\\
+    &= \int_{V(\mathbf{x}_{a})}1_{\{|B_{a\tilde{V}}(\mathbf{y})| = 2\}}d\mathbf{y}
+  \end{split}
+\end{equation}
+Thus the value of the local objective function is simply the area where the visible set of $a$ overlaps with those of excatly two neighbouring agents.

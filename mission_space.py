@@ -7,20 +7,15 @@ class MissionSpace(Polygon):
   def __init__(self, bounds, obstacles = []):
     super().__init__(bounds, obstacles)
     self.num_obstacles = len(obstacles)
-    self.edge = bounds
+    self.edges = bounds
     self.obstacles = obstacles
-    self.prepped = prep(self)
-    self.A_bounds, self.b_bounds, self.A_obstcls, self.b_obstcls = self.__get_ineq_constraint_matrices()
+    self.__set_ineq_constraint_matrices()
 
   def within_mission_space_bounds_constraint(self, s):
-    h, = s.shape
-    return -(np.kron(self.A_bounds, np.eye(int(h/2)))@s + np.tile(self.b_bounds.reshape(-1, ), int(h/2)))
+    return -(self.A_bounds@(s.reshape(2, 1)) + self.b_bounds).reshape(-1)
   
   def outside_obstacles_constraint(self, s):
-    h, = s.shape
-    A = np.concatenate(self.A_obstcls, axis=0)
-    b = np.concatenate(self.b_obstcls, axis=0)
-    return np.max((np.kron(A, np.eye(int(h/2)))@s + np.tile(b.reshape(-1, ), int(h/2))))
+    return np.max(self.A_obstcls@(s.reshape(2, 1)) + self.b_obstcls)
 
   def plot(self, axis):
     x, y = self.exterior.xy
@@ -29,14 +24,15 @@ class MissionSpace(Polygon):
       x, y = interior.xy
       axis.fill(x, y, fc="gray")
 
-  def __get_ineq_constraint_matrices(self):
-    F_hull = ConvexHull(self.edge)
-    A_in_bounds = F_hull.equations[:, :2]
-    b_in_bounds = F_hull.equations[:, 2:]
-    A_in_obs_list = [None]*self.num_obstacles
-    b_in_obs_list = [None]*self.num_obstacles
+  def __set_ineq_constraint_matrices(self):
+    F_hull = ConvexHull(self.edges)
+    self.A_bounds = F_hull.equations[:, :2]
+    self.b_bounds = F_hull.equations[:, 2:]
     for i in np.arange(self.num_obstacles):
       obs_hull = ConvexHull(self.obstacles[i])
-      A_in_obs_list[i] = obs_hull.equations[:, :2]
-      b_in_obs_list[i] = obs_hull.equations[:, 2:]
-    return A_in_bounds, b_in_bounds, A_in_obs_list, b_in_obs_list
+      if i == 0:
+        self.A_obstcls = obs_hull.equations[:, :2]
+        self.b_obstcls = obs_hull.equations[:, 2:]
+      else:
+        self.A_obstcls = np.vstack((self.A_obstcls, obs_hull.equations[:, :2]))
+        self.b_obstcls = np.vstack((self.b_obstcls, obs_hull.equations[:, 2:]))
