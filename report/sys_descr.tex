@@ -1,13 +1,5 @@
 \section{System Description}
 
-\subsection{Notation}
-A set $\mathcal{S}$ of points $\mathbf{x}\in\mathbb{R}^{2}$ is defined by it's boundary, $\delta\mathcal{S}$, 
-and it's interior, $\mathrm{int}(\mathcal{S})$. The number of elements in a set $\mathcal{S}$ is denoted as $|\mathcal{S}|$.\newline
-The $Comb(\cdot)$ operator takes as arguments a set $\mathcal{S}$ and an integer $n$ and returns all subset of $\mathcal{S}$ of lenght $n$:
-\begin{equation}
-  Comb(\mathcal{S}, n) = \{\mathcal{A}: \mathcal{A}\subseteq\mathcal{S}, |\mathcal{A}|=n\}
-\end{equation}
-
 \subsection{Feasible space}
 As in \cite{sun2014escaping}, a \textit{mission space}, $\Omega$, is defined as a simple polygon 
 \cite{weissteinsimplepolygon}.
@@ -28,7 +20,7 @@ all points where it is possible to place an entity:
 \end{equation}
 
 \subsection{Agent}
-An \textit{agent}, denoted by an integer $a$, is defined by its position $\mathbf{x}_{a}\in\mathbb{R}^{2}$ and 
+An \textit{agent}, denoted by an index $a$, is defined by its position $\mathbf{x}_{a}\in\mathbb{R}^{2}$ and 
 its maximum range of communication $r_{a}$. From this we define the communication disk of agent $a$:
 \begin{equation}
   D_{a} = \{\mathbf{y}\in\mathbb{R}^{2}: \norm{\mathbf{x}_{a} - \mathbf{y}}\leq r_{a}\}
@@ -36,11 +28,11 @@ its maximum range of communication $r_{a}$. From this we define the communicatio
 Assuming line-of-sight (LoS) communication, meaning an agent cannot communicate with an entity if there is an obstacle or a mission space wall between them, we define the \textit{visible set} of agent 
 $a$:
 \begin{equation}\label[eq]{visible_set_def}
-  V(\mathbf{x}_{a}, r_{a}) = \{\mathbf{y}\in\mathbb{R}^{2}:\mathbf{y}\in D_{a}, \lambda\mathbf{y} + (1-\lambda)\mathbf{x}_{a}\in\mathcal{F}\;\forall\;0\leq\lambda\leq 1\}
+  V_{a} = \{\mathbf{y}\in\mathbb{R}^{2}:\mathbf{y}\in D_{a}, \lambda\mathbf{y} + (1-\lambda)\mathbf{x}_{a}\in\mathcal{F}\;\forall\;0\leq\lambda\leq 1\}
 \end{equation}
 The counterpart to the visible set, called the invisible set of agent $a$, is simply defined as:
 \begin{equation}
-  V_{c}(\mathbf{x}_{a}, r_{a}) = \mathcal{F}\setminus V(\mathbf{x}_{a}, r_{a})
+  U_{a} = \mathcal{F}\setminus V_{a}
 \end{equation}
 An example of the visible set for an agent is show in \figref{vis_set_example}.
 
@@ -48,11 +40,12 @@ The probability of an agent $a$ being able to communicate with another entity po
 the local probability of agent $a$, is defined according to:
 \todo{Find notation for $\mathbb{R}^{5}$ with non-negative values in last dimension}
 \begin{equation}\label[eq]{local_prob}
-  \hat{p}:(\mathbb{R}^{2}, \mathbb{R}^{2}, \mathbb{R}^{+})\rightarrow [0, 1]\quad\hat{p}(\mathbf{x}_{a}, r_{a}, \mathbf{y}) = \begin{cases}
-    p(\norm{\mathbf{x}_{a}-\mathbf{y}})>0 &, \mathbf{y}\in V(\mathbf{x}_{a}, r_{a})\\
-    0 &, \mathbf{y}\in V_{c}(\mathbf{x}_{a}, r_{a})
+  \hat{p}:\mathbb{R}^{2}\rightarrow [0, 1]\quad\hat{p}(\mathbf{x}_{a}, \mathbf{y}) = \begin{cases}
+    p(\norm{\mathbf{x}_{a}-\mathbf{y}}) &, \mathbf{y}\in V_{a}\\
+    0 &, \mathbf{y}\in U_{a}
   \end{cases}
 \end{equation}
+Where $p(\cdot)$ is a non-increasing function of its argument.
 \begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{figs/vis_set_example.pdf}
@@ -62,11 +55,11 @@ the local probability of agent $a$, is defined according to:
 \todo{Update figure: $\mathbf{s}_{i}$ should be $\mathbf{x}_{a}$}
 \subsection{Swarm}
 A \textit{swarm}, $\mathcal{S}$ of size $N$ is a set of agents $\{a_{0}\hdots a_{N-1}\}$. The state of the swarm is described by the state of its participants 
-, and is expressed as vector $\mathbf{x}_{\mathcal{S}}\in\mathbb{R}^{2N}$ as shown in \eqref{swarm_state_def}.
+, and is expressed as vector $\mathbf{X}_{\mathcal{S}}\in\mathbb{R}^{2N}$ as shown in \eqref{swarm_state_def}.
 \begin{equation}\label[eq]{swarm_state_def}
-  \mathbf{x}_{\mathcal{S}} = \begin{bmatrix}
+  \mathbf{X}_{\mathcal{S}} = \begin{bmatrix}
     \mathbf{x}_{a_{0}}\\\vdots\\\mathbf{x}_{a_{N-1}}
-  \end{bmatrix}
+  \end{bmatrix},\quad\mathbf{X}_{\mathcal{S}, i} = \mathbf{x}_{a_{i}}
 \end{equation}
 The maximum radii of communication of the swarm are represented as the vector $\mathbf{r}\in\mathbb{R}^{N}$ as shown in \eqref{swarm_radii_def}.
 \begin{equation}\label[eq]{swarm_radii_def}
@@ -77,12 +70,9 @@ The maximum radii of communication of the swarm are represented as the vector $\
 Assuming that the distributions for all agents in the swarm are independent lets us use (7) in \cite{10.2307/24304959} to express 
 the probability of $n$ members in the swarm, $\mathcal{S}$, being able to communicate with an entity at a point $\mathbf{y}$:
 \begin{equation}\label[eq]{Phi_def}
-  \Phi^{n}_{\mathcal{S}}(\mathbf{y}) = Pr(N_{com}(\mathcal{S}, \mathbf{y}) = n) = \sum_{A\in Comb(\mathcal{S}, n)}\prod_{a\in\mathcal{A}}\hat{p}(\mathbf{x}_{a}, \mathbf{y}, r_{a})\prod_{a\in\mathcal{S}\setminus\mathcal{A}}\big(1-\hat{p}(\mathbf{x}_{a}, \mathbf{y}, r_{a})\big)
+  \Phi^{n}(\mathbf{X}_{\mathcal{S}}, \mathbf{y}) = \sum_{A\in Comb(\mathcal{S}, n)}\prod_{a\in\mathcal{A}}\hat{p}(\mathbf{x}_{a}, \mathbf{y})\prod_{a\in\mathcal{S}\setminus\mathcal{A}}\big(1-\hat{p}(\mathbf{x}_{a}, \mathbf{y})\big)
 \end{equation}
 Later we will use the probability of \textit{at least} n members in a swarm beign able to communicate with an entity placed at $\mathbf{y}$, which is defined as:
-\begin{equation}
-  \begin{split}
-    \Phi^{n^{+}}_{\mathcal{S}}(\mathbf{y}) &= Pr(N_{com}(\mathcal{S}, \mathbf{y}) \geq n) = 1 - \sum_{i=0}^{n-1}Pr(N_{com}(\mathcal{S}, \mathbf{y}) = i)\\
-    &= 1 - \sum_{i=0}^{n-1}\Phi^{i}_{\mathcal{S}}(\mathbf{y})
-  \end{split}
+\begin{equation}\label[eq]{more_than_n_prob}
+  \Phi^{n^{+}}(\mathbf{X}_{\mathcal{S}}, \mathbf{y}) = 1 - \sum_{i=0}^{n-1}\Phi^{i}(\mathbf{X}_{\mathcal{S}}, \mathbf{y})
 \end{equation}

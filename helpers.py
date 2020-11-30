@@ -21,6 +21,9 @@ def get_x_N_sub_a(x, a):
   x = x.reshape(2, -1)
   return x[: ,np.r_[0:a, a+1:x.shape[1]]]
 
+def get_B_a(x_a, X_N_sub_a, com_radius):
+  return np.where(np.linalg.norm(x_a.reshape(2, 1) - X_N_sub_a, axis=0) <= 2*com_radius)[0]
+
 def get_edge_intersections(x, com_radius, obstacle, drop_vertices = []):
   check_vertices = np.array([i for i in np.arange(obstacle.shape[0]) if not i in drop_vertices])
 

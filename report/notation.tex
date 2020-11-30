@@ -1,0 +1,28 @@
+\section{Notation}
+\begin{itemize}
+  \item $\Omega$: Mission space.
+  \item $\mathcal{O}$: Set of obstacles inside the mission space.
+  \item $\mathcal{F}$: Feasible space.
+  \item $\mathbf{x}_{a}$: Position of agent $a$.
+  \item $r_{a}$: Maximum communication range of agent $a$.
+  \item $\hat{p}(\mathbf{x}_{a}, \mathbf{y})$: Probability of agent $a$ being able to communicate with entity at position $\mathbf{y}$.
+  \item $V_{a}$: Visible set of agent $a$.
+  \item $U_{a}$: Invisible set of agent $a$.
+  \item $\mathbf{X}_{\mathcal{S}}$: Positions of all agents in the swarm $\mathcal{S}$.
+  \item $\Phi^{n}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
+  \item $\Phi^{n^{+}}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ or more members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
+\end{itemize}
+
+\subsection{Mathematical operators}
+\begin{itemize}
+  \item For a set $\mathcal{S}$ defined by $\mathcal{S} = \{s_{0}\hdots s_{N-1}\},\;N<\infty$ we define:
+  \begin{itemize}
+    \item $|\mathcal{S}| = N$: The size of $\mathcal{S}$.
+    \item $\mathrm{Comb}(\mathcal{S}, n) = \{\mathcal{A}: \mathcal{A}\subseteq\mathcal{S}, |\mathcal{A}|=n\}$: the set of all subsets of $\mathcal{S}$ of size $n$.
+  \end{itemize}
+  \item For a set $\mathcal{S}$ of points $\mathbf{x}\in\mathbb{R}^{N}$ defined by $\mathcal{S} = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x})\leq\mathbf{0}\}$ we define:
+  \begin{itemize}
+    \item $\delta\mathcal{S} = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x}) = \mathbf{0}\}$: The boundary of $\mathcal{S}$.
+    \item $\mathrm{int}(\mathcal{S}) = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x}) < \mathbf{0}\}$: The interior of $\mathcal{S}$.
+  \end{itemize}
+\end{itemize}

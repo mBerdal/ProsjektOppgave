@@ -18,8 +18,8 @@ class MissionSpace(Polygon):
     return np.max(self.A_obstcls@(s.reshape(2, 1)) + self.b_obstcls)
 
   def plot(self, axis):
-    x, y = self.exterior.xy
-    axis.plot(x, y, color="gray")
+    axis.plot(*self.exterior.xy, color="gray")
+    axis.fill(*self.exterior.xy, color="white")
     for interior in self.interiors:
       x, y = interior.xy
       axis.fill(x, y, fc="gray")
