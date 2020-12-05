@@ -41,7 +41,7 @@ def plot_vis_set_example():
   ax.annotate("$\mathbf{x}_{a}$", xy=(s[0]+0.1, s[1]+0.1))
   ax.annotate("$o_{0}$", xy=(2-0.1, 2))
   ax.annotate("$o_{1}$", xy=(-0.41, 0))
-  ax.annotate("$V(\mathbf{x}_{a})$", xy=(-2, 2))
+  ax.annotate("$V_{a}$", xy=(-2, 2))
   ax.annotate("$\delta\Omega$", xy=(4-0.5, -3+0.1))
   ax.axis("equal")
   ax.axis("off")
@@ -105,11 +105,11 @@ def plot_intersections():
   ax.scatter(*x_3, color="blue", zorder=100, label="$\mathbf{x}_{j},\;j\in\mathcal{N}/\{a\}$")
   plot_visible_polygon(c_3, ax)
   int_a_1 = c_a.intersection(c_1).intersection(c_2).difference(c_3)
-  ax.fill(*int_a_1.exterior.xy, color="blue", alpha=0.3, label="$\{\mathbf{y}:\:\Phi_{\mathcal{N}/\{a\}}^{2}(\mathbf{y})\^{p}_{a}(\mathbf{y}) > 0\}$")
+  ax.fill(*int_a_1.exterior.xy, color="blue", alpha=0.3, label="$\{\mathbf{y}:\:\Phi^{2}(\mathbf{X}_{\mathcal{N}/\{a\}}, \mathbf{y})\^{p}_{a}(\mathbf{y}) > 0\}$")
   int_a_3 = c_a.intersection(c_2).intersection(c_3).difference(c_1)
   ax.fill(*int_a_3.exterior.xy, color="blue", alpha=0.3)
   int_neighs = c_1.intersection(c_2).intersection(c_3)
-  ax.fill(*int_neighs.exterior.xy, color="green", alpha=0.3, label="$\{\mathbf{y}:\:\Phi_{\mathcal{N}/\{a\}}^{3^{+}}(\mathbf{y}) > 0\}$")
+  ax.fill(*int_neighs.exterior.xy, color="green", alpha=0.3, label="$\{\mathbf{y}:\:\Phi^{3^{+}}(\mathbf{X}_{\mathcal{N}/\{a\}}, \mathbf{y}) > 0\}$")
 
   circs = [c_a, c_1, c_2, c_3]
   from itertools import combinations
@@ -119,7 +119,7 @@ def plot_intersections():
       u = x.intersection(y).intersection(z)
     else:
       u = u.union(x.intersection(y).intersection(z))
-  ax.plot(*u.exterior.xy, color="black", label="$\delta\{\mathbf{y}:\:\Phi_{\mathcal{N}}^{3^{+}}(\mathbf{y}) > 0\}$")
+  ax.plot(*u.exterior.xy, color="black", label="$\delta\{\mathbf{y}:\:\Phi^{3^{+}}(\mathbf{X}_{\mathcal{N}}, \mathbf{y}) \geq 0\}$")
 
   ax.axis("equal")
   ax.axis("off")
@@ -148,8 +148,9 @@ def plot_close_dist_repell():
   plt.show()
 
 def plot_objective():
-  N_B_a = 3
-  X_B_a = np.random.uniform(-10, 10, 2*N_B_a).reshape(2, N_B_a)
+  N_B_a = 5
+  r = 3
+  X_B_a = np.random.uniform(-2*r, 2*r, 2*N_B_a).reshape(2, N_B_a)
   M = MissionSpace(np.array([
     [-10, -10],
     [10, -10],
@@ -157,29 +158,76 @@ def plot_objective():
     [-10, 10],
   ]))
   print(X_B_a)
-  V_B_a = [get_visible_polygon(X_B_a[:, j], 3, M) for j in np.arange(X_B_a.shape[1])]
-  fig = plt.figure()
-  ax = fig.add_subplot(111, projection="3d")
-  ys = np.linspace(-10, 10, 50)
-  xs = np.linspace(-10, 10, 50)
+  V_B_a = np.array([get_visible_polygon(X_B_a[:, j], r, M) for j in np.arange(X_B_a.shape[1])])
+  precomputed_intersection = DistrOpt.get_precomputed_intersections(V_B_a)
+  fig = plt.figure(figsize=(9, 9))
+  ax = fig.add_subplot(111, projection="3d", )
+
+  ys = np.linspace(-10, 10, 100)
+  xs = np.linspace(-10, 10, 100)
   xx, yy = np.meshgrid(xs, ys)
   zz = np.zeros(xx.shape)
   for x in np.arange(xs.shape[0]):
     for y in np.arange(ys.shape[0]):
-      zz[y, x] = DistrOpt.area_covered_by_two_neighbours(np.array([xs[x], ys[y]]), V_B_a, 3, M) - DistrOpt.close_dist_repell(np.array([xs[x], ys[y]]), X_B_a)
+      zz[y, x] = DistrOpt.get_area(np.array([xs[x], ys[y]]), precomputed_intersection, r, M) - DistrOpt.close_dist_repell(np.array([xs[x], ys[y]]), X_B_a, 1)
   
-  for i in np.arange(X_B_a.shape[1]):
-    print(X_B_a[0, i], X_B_a[1, i])
-    ax.scatter(X_B_a[0, i], X_B_a[1, i], -1, color="orange")
+  #for i in np.arange(X_B_a.shape[1]):
+  #  print(X_B_a[0, i], X_B_a[1, i])
+  #  ax.scatter(X_B_a[0, i], X_B_a[1, i], -1, color="orange")
   ax.set_xlabel("$x_{a}$")
   ax.set_ylabel("$y_{a}$")
-  ax.plot_surface(xx, yy, zz)
+  surf = ax.plot_surface(xx, yy, zz, label="$H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$")
+  surf._facecolors2d = surf._facecolors3d
+  surf._edgecolors2d = surf._edgecolors3d
+  max_z = np.max(zz) + 0.5
+  ax.scatter(*np.vstack((X_B_a, max_z*np.ones((1, N_B_a)))), color="orange")
+  for i in np.arange(N_B_a):
+    b = np.vstack(([*X_B_a[:, i], 0], [*X_B_a[:, i], max_z]))
+    if i == 0:
+      ax.plot(*b.T, color="orange", label="$\mathbf{x}_{j},\;j\in\mathcal{B}_{a}$")
+    else:
+      ax.plot(*b.T, color="orange")
+  ax.legend()
+  plt.savefig('report/figs/objective_example.pdf', format='pdf')
   plt.show()
-  pass
+
+def plot_feasible_space():
+  lim = 10
+  X_B_a = np.random.uniform(-lim, lim, 2*3).reshape(2, 3)
+  r_min = 1.2
+  r = 3
+  l_B_a = lambda x_a: np.count_nonzero(np.linalg.norm(x_a - X_B_a, axis=0) <= 2*r)
+  fig, ax = plt.subplots()
+  ax.axis("equal")
+
+
+  theta = np.linspace(0, 2*np.pi, 1000)
+  for i in np.arange(X_B_a.shape[1]):
+    ax.fill(*(X_B_a[:, i].reshape(2, 1) + r_min*np.array([np.cos(theta), np.sin(theta)])), color=bg_clr)
+  ax.scatter(*X_B_a, color="blue", zorder=100)
+  pts = np.empty((2, 1))
+  for x in np.linspace(-lim, lim, 1000):
+    for y in np.linspace(-lim, lim, 1000):
+      pt = np.array([[x], [y]])
+      if l_B_a(pt) >= 2:
+        pts = np.hstack((pts, pt))
+  pts = pts[:, 1:]
+  min_ys = np.empty((1, ))  
+  max_ys = np.empty((1, ))  
+  for idx in np.arange(pts.shape[1]):
+    x = pts[0, idx]
+    min_ys = np.hstack((min_ys, np.min(pts[1, pts[0, :] == x])))
+    max_ys = np.hstack((max_ys, np.max(pts[1, pts[0, :] == x])))
+  
+  ax.fill_between(pts[0, :], min_ys[1:], max_ys[1:])
+
+
+  plt.show()
 
 
 if __name__ == "__main__":
-  plot_objective()
+  #plot_feasible_space()
+  #plot_objective()
   exit(0)
   plot_close_dist_repell()
   plot_intersections()

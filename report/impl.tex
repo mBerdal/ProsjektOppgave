@@ -5,19 +5,19 @@ We assume that the agents have perfect communication capabilities within their m
   \hat{p}(\mathbf{x}_{a}, \mathbf{y}) = \begin{cases}
     1, &\mathbf{y}\in V_{a}\\
     0, &\mathbf{y}\in U_{a}
-  \end{cases} = 1_{\big\{\mathbf{y}\in V_{a}\big\}}
+  \end{cases} = 1_{\big\{\mathbf{y}\in V_{a}\big\}},
 \end{equation}
 where $1_{\{\cdot\}}$ is the indicator function, which is simply equal to one if the clause in the subscript is true and zero otherwise.
-This implies that the overall probability of coverage over the feasible space in \eqref{rewritten_objective} is simply the area of all intersctions of three or more visible sets.
+This implies that the overall probability of coverage over the feasible space in \eqref{rewritten_objective} is simply the area of all intersections of three or more visible sets.
 
-\subsection{Computing the local objective function}
+\subsection{Computing the local probability of coverage}
 We partition the neighbours of $a$ into two sets:
 \begin{subequations}
   \begin{equation}
     \mathcal{B}_{a V} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in V_{j}\}
   \end{equation}
   \begin{equation}
-    \mathcal{B}_{a U} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in U_{j}\}
+    \mathcal{B}_{a U} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in U_{j}\}.
   \end{equation}
 \end{subequations}
 Thus for a given point $\mathbf{y}$, the set $\mathcal{B}_{a V}$ contains all neighbours of $a$ whose visible set contains $\mathbf{y}$,
@@ -29,7 +29,81 @@ Now the local probability of coverage for agent $a$ can be written as:
     L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})1_{\{\mathbf{y}\in V_{a}\}}d\mathbf{y} = \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})d\mathbf{y}\\
     &= \int_{V_{a}}\sum_{n = 0}^{2} \Phi^{n}(\mathbf{X}_{\mathcal{B}_{a V}}, \mathbf{y})\Phi^{2-n}(\mathbf{X}_{\mathcal{B}_{a U}},\mathbf{y})d\mathbf{y}\\
     &= \int_{V_{a}}\sum_{n = 0}^{2}1_{\{|B_{a V}| = n\}}1_{\{2-n = 0\}}d\mathbf{y}\\
-    &= \int_{V_{a}}1_{\{|B_{a V}| = 2\}}d\mathbf{y}
+    &= \int_{V_{a}}1_{\{|B_{a V}| = 2\}}d\mathbf{y}.
   \end{split}
 \end{equation}
-Thus the value of the local objective function is simply the area where the visible set of $a$ overlaps with those of excatly two neighbouring agents.
+Thus the value of the local probability of coverage is equal to the area where the visible set of $a$ overlaps with those of excatly two neighbouring agents when assuming perfect communication within the entire visible set.
+
+The intersection area is calculated as follows:
+\begin{equation}\label[eq]{two_neigh_area}
+  \begin{split}
+    L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= A\Biggr(\bigcup_{\mathcal{A}\in Comb(\mathcal{B}_{a}, 2)}\Bigg[\bigg(V_{a}\cap \bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr)\\
+    &= A\Biggr(V_{a}\cap\bigcup_{\mathcal{A}\in Comb(\mathcal{B}_{a}, 2)}\Bigg[\bigg(\bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr),
+  \end{split}
+\end{equation}
+where $A(\cdot)$ returns the area of its argument.
+\subsection{Optimizing swarm configuration}
+Running simulations is done by iteratively solving \eqref{local_opt_prob} for one agent at the time. Meaning at any time there is only
+a single agent computing its optimal position while all other agents are static. Once the agent currently computing its optimal position
+has done so, it moves to the optimum. Then the next agent does the same, and so on. This procedure is repeated
+until all agents are sufficiently close to a local optimum. The procedure is described in algorithm \ref{alg:alg1}.
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwIn{Size of swarm: $N$, Initial configuration of swarm: $\mathbf{X}_{0}$, Feasible space: $\mathcal{F}$, Tolerance: $\epsilon$}
+
+  $\mathbf{X}_{\mathcal{N}}\gets \mathbf{X}_{0}$\;
+  \For{$a\gets 0$ \KwTo $N-1$}{
+    $\mathbf{C}[a]\gets\mathrm{False}$\;
+    $\mathbf{V}[a]\gets$ Compute $V_{a}$ using \eqref{visible_set_def} with $\mathbf{x}_{a} = \mathbf{X}_{\mathcal{N}}[a]$\;
+  }
+   \While{not $\mathbf{C}[a]$ is $\mathrm{True}$ for all $a = 0\hdots N-1$}{
+     \For{$a\gets 0$ \KwTo $N-1$}{
+       $\mathbf{x}_{a, 0}\gets\mathbf{X}_{\mathcal{N}}[a]$\;
+       $\mathcal{B}_{a}\gets$ Compute $\mathcal{B}_{a}$ using \eqref{neigh_def} with $\mathbf{x}_{a} = \mathbf{x}_{a, 0}$\;
+       $\mathbf{x}_{a}^{*}\gets$ Solve \eqref{local_opt_prob} with initial guess $\mathbf{x}_{a, 0}$ and neighbours $\mathcal{B}_{a}$\;
+       \If{$\norm{\mathbf{x}_{a}^{*} - \mathbf{x}_{a, 0}}\leq\epsilon$}{
+         $\mathbf{C}[a]\gets\mathrm{True}$
+       }
+       $\mathbf{V}[a]\gets$ Compute $V_{a}$ using \eqref{visible_set_def} with $\mathbf{x}_{a} = \mathbf{x}_{a}^{*}$\;
+       $\mathbf{X}_{\mathcal{N}}[a]\gets\mathbf{x}_{a}^{*}$\;
+     }
+   }
+   \KwRet{$\mathbf{X}_{\mathcal{N}}$}
+   \caption{Optimizing swarm configuration}
+   \label{alg:alg1}
+  \end{algorithm}
+\subsection{Optimization solver}
+As \eqref{local_opt_prob} is a non-convex and constrained optimization problem it is solved using Sequential Quadratic Programming (SQP). 
+In \cite{kraft1988software} a Nonlinear Program (NLP) is defined as:
+\begin{equation}\label[eq]{nlp}
+  \begin{split}
+    \min_{\mathbf{x}\in\mathbb{R}^{n}}f(\mathbf{x})\quad\mathrm{s.t.}\quad&g_{i}(\mathbf{x}) = 0\;i\in\{1\hdots m_{e}\}\\
+    &g_{i}(\mathbf{x}) \geq 0\;i\in\{m_{e}+1\hdots m\}\\
+    &\mathbf{x}^{lb}\leq\mathbf{x}\leq\mathbf{x}^{ub}
+  \end{split}
+\end{equation}
+where $f:\mathbb{R}^{n}\rightarrow\mathbb{R}$ and $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ are assumed to be continuously differentiable. A SQP (Sequential Quadratic Programming) solver finds the solution
+of \eqref{nlp} in an iterative manner. Given an initial guess, $\mathbf{x}_{0}$, of the solution, an SQP solver iteratively solves quadratic sub-problems, generating step size $\alpha_{k}$ and search 
+direction $\mathbf{d}_{k}$. The solution is then updated as:
+\begin{equation}
+  \mathbf{x}_{k+1} = \mathbf{x}_{k} + \alpha_{k}\mathbf{d}_{k}
+\end{equation}
+Iteration is performed until some optimality condition is fulfilled \cite{kraft1988software}.\todo{IN HOW MUCH DETAIL SHOULD I EXPLAIN SQP}
+
+Algorithm \ref{alg:alg1} is implemented in the Python programming language \cite{python}. The Scipy \cite{2020SciPy-NMeth} optimization library implements a wrapper
+for the SQP subroutine proposed in \cite{kraft1988software} which is used for solving \eqref{local_opt_prob}.
+\subsection{Parameters}
+In all simulations the following parameter values are chosen
+\begin{center}
+  \begin{tabular}{l|c|c}
+     & Variable & Value\\
+    \hline
+    Maximum communication range & $r$ & $3$\\
+    Minimum distance to neighbours & $r_{min}$ & $0.2$\\
+    Minimum distance to line connecting neighbours & $d_{min}$ & $0.1$\\
+    Convergence threshold & $\epsilon$ & $10^{-2}$\\
+    Dispersion decay & $k_{2}$ & $1$\\
+    Dispersion gain & $k_{1}$ & $\{0, 1\}$
+  \end{tabular}
+\end{center}

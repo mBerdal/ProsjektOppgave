@@ -1,1 +1,53 @@
 \section{Discussion}
+The results obtained in Section \ref{results} are summarized in Table \ref{tab:sim_res_worlds} and \ref{tab:sim_res_worlds_active}.
+\begin{center}
+  \captionof{table}{Simulation results for all environments without active dispersion\label{tab:sim_res_worlds}}
+  \begin{tabular}{l|l|l|l|l}
+    Environment & 3 agents & 6 agents & 15 agents & 50 agents\\
+    \hline
+    Tinyworld & 100\% & - & - & - \\ 
+    Tinyworld2 & 71.8\% & 98\% & - & - \\
+    Rectworld &  22.1\% & 24.5\% & 95\% & - \\
+    Complexworld & - & - & - & 15.5\% \\
+  \end{tabular}
+\end{center}
+\begin{center}
+  \captionof{table}{Simulation results for all environments with active dispersion\label{tab:sim_res_worlds_active}}
+  \begin{tabular}{l|l|l|l|l}
+    Environment & 3 agents & 6 agents & 15 agents & 50 agents\\
+    \hline
+    Tinyworld & 100\% & - & - & - \\ 
+    Tinyworld2 & 45.2\% & 100\% & - & - \\
+    Rectworld &  25\% & 46\% & 93\% & - \\
+    Complexworld & - & - & - & 89\% \\
+  \end{tabular}
+\end{center}
+
+We start with the most simple environment, Tinyworld, whose simulation results are shown in \ref{tinyworld}. In \figref{fig:3_agnt_tw_k_1_0_distr} and \figref{fig:3_agnt_tw_k_1_1_k_2_1_distr} we clearly see the 
+effect of active dispersion. In the case where no active dispersion is used the objective function is constant over the feasible space. Hence the initial configuration is one of 
+infinitely many equal valued optima, and Algorithm \ref{alg:alg1} haults after one iteration. In the case where active dispersion is applied the agents spread to the corners of the
+feasible space as seen in \figref{fig:3_agnt_tw_k_1_1_k_2_1_distr}. This is due to the fact that $L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$ is constant over the feasible space, hence the 
+local optimization problem \eqref{local_opt_prob} is equivalent to maximizing dispersion between an agent $a$ and its neighbours. In light of \cite{CRB_multilat} the configuration generated
+when applying active dispersion in the Tinyworld environment is the superior one, as the convex hull of the agents span a greater area when applying active dispersion than when only maximizing the area covered
+by an agent and two of its neighbours.
+
+The simulations performed for a swarm of size 3 in the Tinyworld2 environment display a weakness of active dispersion. Here the swarm covers a smaller percentage of the 
+feasible space when applying active dispersion than when not. This is due to the fact that the dispersion term is weighet to heavily. When the local probability of coverage for an agent is small, i.e. $L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$ is small 
+for all possible values of $\mathbf{x}_{a}$, the value of 
+the local objective \eqref{totally_objective} is dominated by the dispersion term. This causes a shift in behaviour. The focus is on dispersion rather than coverage, and Algorithm \ref{alg:alg1} converges
+to a solution that gives a smaller percentage of covered area.
+
+For a swarm of 6 agents in the Tinyworld2 environment the case is quite different. Now active dispersion yields a configuration that gives a larger coverage percentage than when no active
+dispersion is applied.
+
+From the simulations in the Rectworld environment with 6 agents and the Complexworld environment it is 
+clear that active dispersion prevents convergence to clearly sub-optimal local maxima. As seen in \figref{fig:6_agnt_bw_k_1_0_k_2_1_distr} three of the 
+6 agents do not move whatsoever from their initial configuration. This is due to the fact that once the three first agents have performed one optimization and moved to the 
+optimum, the three remaining agents cover a small area in the lower left hand corner of the feasible space. When optimizing the position of each of the remaining three agents
+one at the time, moving will only decrease their local objective. This results on none of the remaining agents moving. Thus once the three agents that have moved converge (after eight iterations as seen in \figref{fig:6_agnt_bw_k_1_0_s_traj}) Algorithm \ref{alg:alg1} haults and the resulting configuration 
+can be seen in the rightmost plot in \figref{fig:6_agnt_bw_k_1_0_k_2_1_distr}. This configuration is clearly not an optimal solution as translating all agents in the north-eastern direction would yield a higher 
+percentage of covered area. 
+
+
+Seen as the objective when no active dispersion is applied is the area covered
+by an agent and excatly two of its neighbours, the remaining three agents lie at a local optimum after the initial three agents have moved.

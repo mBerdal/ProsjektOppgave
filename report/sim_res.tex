@@ -1,58 +1,24 @@
-\section{Simulation Results}
-
-%%% 6-by-6 3 agents r3 no obs
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/6_by_6_no_obs_3_agnts_area_traj.pdf}
-  \caption{Percentage covered area of $\mathcal{F}$ vs. iteration count for rectangular environment. Area of $\mathcal{F} = 36\:\mathrm{m}^{2}$}
-  \label[fig]{local_coverage_example}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/6_by_6_no_obs_3_agnts_distr.pdf}
-  \caption{Inital and final position of agents in rectangular environment. Area of $\mathcal{F} = 36\:\mathrm{m}^{2}$, maximum communication range $r=3\:\mathrm{m}$.}
-  \label[fig]{local_coverage_example}
-\end{figure}
-
-%%% 6-by-6 10 agents r3 no obs
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/6_by_6_no_obs_10_agnts_area_traj.pdf}
-  \caption{Percentage covered area of $\mathcal{F}$ vs. iteration count for rectangular environment with rectangular central obstacle. Area of $\mathcal{F} = 36\:\mathrm{m}^{2}$}
-  \label[fig]{local_coverage_example}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/6_by_6_no_obs_10_agnts_distr.pdf}
-  \caption{Inital and final position of agents in rectangular environment with rectangular central obstacle. Area of $\mathcal{F} = 36\:\mathrm{m}^{2}$, maximum communication range $r=3\:\mathrm{m}$.}
-  \label[fig]{local_coverage_example}
-\end{figure}
-
-
-%%% 2-by-2 Three agents r3
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/1_by_1_no_obs_3_agnts_area_traj.pdf}
-  \caption{Percentage covered area of $\mathcal{F}$ vs. iteration count for rectangular obstacle-less environment. Area of $\mathcal{F} = 4\:\mathrm{m}^{2}$}
-  \label[fig]{local_coverage_example}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/1_by_1_no_obs_3_agnts_distr.pdf}
-  \caption{Inital and final position of agents in rectangular obstacle-less environment. Area of $\mathcal{F} = 4\:\mathrm{m}^{2}$, maximum communication range $r=9\:\mathrm{m}$.}
-  \label[fig]{local_coverage_example}
-\end{figure}
-
-%%% 2-by-2 Three agents r3 center obs
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/1_by_1_center_obs_3_agnts_area_traj.pdf}
-  \caption{Percentage covered area of $\mathcal{F}$ vs. iteration count for rectangular environment with rectangular central obstacle. Area of $\mathcal{F} = 4\:\mathrm{m}^{2}$}
-  \label[fig]{local_coverage_example}
-\end{figure}
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=.75\textwidth]{figs/1_by_1_center_obs_3_agnts_distr.pdf}
-  \caption{Inital and final position of agents in rectangular environment with rectangular central obstacle. Area of $\mathcal{F} = 4\:\mathrm{m}^{2}$, maximum communication range $r=9\:\mathrm{m}$.}
-  \label[fig]{local_coverage_example}
-\end{figure}
+\section{Simulations}\label[sec]{results}
+Simulations are done in four different mission spaces with properties summed up in Table \ref{tab:worlds}.
+\begin{center}
+  \captionof{table}{Mission space properties\label{tab:worlds}}
+  \begin{tabular}{l|l|l}
+    Name & Size & Obstacles\\
+    \hline
+    Tinyworld & 1.5-by-1.5 square & None\\
+    Tinyworld2 & 1.5-by-1.5 square & Central 0.5-by-0.5 square\\
+    Rectworld & 10-by-10 square & None\\
+    Complexworld & Pentagon & Horizontal wall, vertical wall and hexagon
+  \end{tabular}
+\end{center}
+For all mission spaces simulations are performed where the dispersion term is neglected ($k_{1} = 0$), i.e.
+$H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) = L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$, and where the dispersion term
+is present ($k_{1} = 1$).
+\clearpage
+\input{simulations/tinyworld}
+\clearpage
+\input{simulations/tinyworld2}
+\clearpage
+\input{simulations/rectworld}
+\clearpage
+\input{simulations/complexworld}

@@ -1,19 +1,19 @@
 import numpy as np
-from helpers import get_x_a, get_x_N_sub_a, get_B_a, get_visible_polygon, nCr, get_covered_polygon
-from coverage_helpers import IntersectionHelper as ih
+from numpy.lib.arraysetops import isin
+from helpers import get_x_a, get_x_N_sub_a, get_visible_polygon, get_covered_polygon
 from scipy.optimize import minimize
-from itertools import combinations
 from shapely.ops import unary_union
-from shapely.geometry import Point, Polygon
 from shapely.errors import TopologicalError
+from shapely.geometry import MultiPolygon
 from copy import deepcopy
 
 class DistrOpt():
-  def __init__(self, X_N_init, com_radius, mission_space, min_dist, k_1 = 1, k_2 = 1, local_tol = 10**(-3)):
+  def __init__(self, X_N_init, com_radius, mission_space, min_dist, d_min, k_1 = 1, k_2 = 1, local_tol = 10**(-2)):
     self.X_N_init = X_N_init
     self.com_radius = com_radius
     self.mission_space = mission_space
     self.min_dist = min_dist
+    self.d_min = d_min
     self.k_1 = k_1
     self.k_2 = k_2
     self.local_tol = local_tol
@@ -28,7 +28,7 @@ class DistrOpt():
       self.static_constraints.append(
         {
           "type": "ineq",
-          "fun": mission_space.outside_obstacles_constraint
+          "fun": mission_space.obs_test
         }
       )
     self.dynamic_constraints = lambda X_B_a: [
@@ -42,11 +42,6 @@ class DistrOpt():
         "fun": DistrOpt.min_two_neigh_constraint,
         "args": (X_B_a, self.com_radius)
       },
-      {
-        "type": "ineq",
-        "fun": DistrOpt.non_linear_neighbours_constraint,
-        "args": (X_B_a, )
-      },
     ]
 
   def __init_optimization(self):
@@ -58,7 +53,7 @@ class DistrOpt():
     self.area_traj = np.array([
       [get_covered_polygon(X, self.com_radius, self.mission_space).area],
       [0]
-      ])
+    ])
     return X, visible_polys
 
   def __single_agent_optimization(self, a, X, visible_polys, local_max_iter):
@@ -67,6 +62,15 @@ class DistrOpt():
     B_a = B_a_cup_a[B_a_cup_a != a]
     X_B_a = X[:, B_a]
     V_B_a = visible_polys[B_a]
+    
+    
+    constraints = self.static_constraints + self.dynamic_constraints(X_B_a)
+    if np.linalg.matrix_rank(X_B_a[:, 0].reshape(2, 1) - X_B_a[:, 1:]) < 2:
+      constraints += [{
+        "type": "ineq",
+        "fun": DistrOpt.no_line_neigh,
+        "args": (X_B_a, self.d_min)
+      }]
 
     precomputed_intersections = DistrOpt.get_precomputed_intersections(V_B_a)
 
@@ -75,7 +79,7 @@ class DistrOpt():
       lambda s, *args: DistrOpt.objective(s, *args),
       x_a_init,
       args = (X_B_a, precomputed_intersections, self.com_radius, self.k_1, self.k_2, self.mission_space),
-      constraints = self.static_constraints + self.dynamic_constraints(X_B_a),
+      constraints = constraints,
       method="SLSQP",
       options={"maxiter": local_max_iter}
     )
@@ -94,6 +98,8 @@ class DistrOpt():
 
   def optimize(self, local_max_iter = 500):
     X, visible_polys = self.__init_optimization()
+    self.X_traj = np.copy(X).reshape(*X.shape, 1)
+    self.step_length_traj = np.zeros((X.shape[1], 2))
     converged = np.zeros((self.X_N_init.shape[1]), dtype=bool)
 
     print("OPTIMIZATION STARTED")
@@ -105,6 +111,7 @@ class DistrOpt():
       for a in np.arange(self.X_N_init.shape[1], dtype=int):
         x_a, V_a = self.__single_agent_optimization(a, X, visible_polys, local_max_iter)
         print(f"Agent {a} step length: {np.linalg.norm(X[:, a] - x_a)}")
+        self.step_length_traj[a, iters] = np.linalg.norm(X[:, a] - x_a)
         converged[a] = np.linalg.norm(X[:, a] - x_a) <= self.local_tol
         visible_polys[a] = V_a
         X[0, a] = x_a[0]
@@ -112,10 +119,10 @@ class DistrOpt():
 
         if DistrOpt.min_two_neigh_constraint(x_a, get_x_N_sub_a(X, a), self.com_radius) < 0:
           print(f"Warning! Agent {a} has less than two neighbours")
-        if (self.mission_space.within_mission_space_bounds_constraint(get_x_a(X, a).reshape(2, 1)) < 0).any():
-          print(f"Warning! Agent {a} breaking within mission space bounds constraint:")
       covered_area = get_covered_polygon(X, self.com_radius, self.mission_space).area
       print("covered area: ", covered_area, "iteration: ", iters)
+      self.X_traj = np.append(self.X_traj, X.reshape(*X.shape, 1), axis=2)
+      self.step_length_traj = np.hstack((self.step_length_traj, np.empty((X.shape[1], 1))))
       self.area_traj = np.hstack((self.area_traj, np.array([
         [covered_area],
         [iters]
@@ -136,11 +143,11 @@ class DistrOpt():
     return X_B_a[:, np.linalg.norm(x_a - X_B_a, axis=0) <= 2*com_radius].shape[1] - 2
 
   @staticmethod
-  def non_linear_neighbours_constraint(x_a, X_B_a):
-    x_a = x_a.reshape(2, 1)
-    if X_B_a.shape[1] < 2:
-      return -1
-    return np.linalg.matrix_rank(x_a - X_B_a) - 2
+  def no_line_neigh(x_a, X_B_a, d_min):
+    v = (x_a - X_B_a[:, 0]).reshape(2, 1)
+    l = (X_B_a[:, 1] - X_B_a[:, 0]).reshape(2, 1)
+    rejection = v - ((v.T@l)/(l.T@l))*l
+    return np.linalg.norm(rejection)-d_min
 
   @staticmethod
   def get_precomputed_intersections(V_B_a):
@@ -157,7 +164,26 @@ class DistrOpt():
   @staticmethod
   def get_area(x_a, precomputed_intersections, com_radius, mission_space):
     V_a = get_visible_polygon(x_a.reshape(2, 1), com_radius, mission_space)
-    return (precomputed_intersections.intersection(V_a)).area
+    try:
+      return (precomputed_intersections.intersection(V_a)).area
+    except TopologicalError:
+      A = 0
+      for geom in precomputed_intersections.geoms:
+        try:
+          A += geom.intersection(V_a).area
+        except TopologicalError as t:
+          print("Intersects?: ", geom.intersects(V_a), type(geom))
+          if geom.area >= 10**(-8):
+            import matplotlib.pyplot as plt
+            f, a = plt.subplots()
+            a.plot(*geom.exterior.xy, "*")
+            a.plot(*V_a.exterior.xy, "r--")
+            print("Geom area: ", geom.area)
+            f.show()
+            plt.show()
+            print("ALL WENT TO SHIT")
+            exit(0)
+      return A
 
   @staticmethod
   def close_dist_repell(x_a, X_B_a, k_2):

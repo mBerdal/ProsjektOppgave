@@ -4,6 +4,7 @@ from itertools import combinations
 from shapely.ops import unary_union, cascaded_union
 from shapely.geometry import Point, MultiPoint, Polygon
 from descartes.patch import PolygonPatch
+import matplotlib.pyplot as plt
 
 def atan(y, x):
   return np.arctan2(y, x) + np.where(y < 0, 2*np.pi, 0)
@@ -91,7 +92,7 @@ def get_visible_polygon(x, com_radius, mission_space):
   invisible_multipoly = unary_union([
     get_invisible_polygon(x, com_radius, obs) for obs in mission_space.obstacles
   ])
-  return Point(x).buffer(com_radius).intersection(mission_space).difference(invisible_multipoly)
+  return Point(x).buffer(com_radius, 100).difference(invisible_multipoly).intersection(mission_space)
 
 def get_covered_polygon(x, com_radius, mission_space):
   polys = [
@@ -112,9 +113,18 @@ def plot_cover(cover_poly, ax, clr="blue", alpha=0.2):
       ax.add_patch(PolygonPatch(geom, color=clr, alpha=alpha))
 
 def plot_visible_polygon(vis_poly, ax):
-  ax.plot(
-      *vis_poly.exterior.xy,
-      color="#122394",
-      linestyle="dashed",
-      alpha = 0.4
-    )
+  try:
+    ax.plot(
+        *vis_poly.exterior.xy,
+        color="#122394",
+        linestyle="dashed",
+        alpha = 0.4
+      )
+  except AttributeError:
+    fig, axis = plt.subplots()
+    axis.set_title("ERROR morra di... er MANN")
+    for geom in vis_poly.geoms:
+      print(geom.area)
+      axis.fill(*geom.exterior.xy, color="red")
+    vp = max(vis_poly.geoms, key = lambda geom: geom.area)
+    plot_visible_polygon(vp, ax)

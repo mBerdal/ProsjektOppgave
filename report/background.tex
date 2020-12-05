@@ -3,32 +3,32 @@ Micro Areal Vehicles (MAVs) have great potential in contributing to indoor searc
 make them easy to transport and allows for rapid field deployment. Furthermore they are agile, allowing them to operate in 
 complex environments and accessing hard-to-get-to places.
 
-Limitations of current technologies, prohibiting the existance of fully autonomous MAVs, are examined in \cite{MAV_enabling}. They define the following
+Limitations of current technologies, prohibiting the existence of fully autonomous MAVs, are examined in \cite{MAV_enabling}. They define the following
 requirements for a fully autonomous MAV:
 \begin{itemize}
   \item Inference: The ability to infer situational awareness from sensory measurements.
   \item Reasoning: The ability to define a mission based on abstract human-defined goals.
-  \item Unsupervised learning: The ability to adapt and learn its own controll strategies without human supervision.
+  \item Unsupervised learning: The ability to adapt and learn its own control strategies without human supervision.
 \end{itemize}
-Due to the constraints on the size of MAVs, the existance of fully autonomous MAVs are mainly dependent on the existance of 
-small and efficient enough hardware components such as power supplies, sensors and processors allowing them to quickly process the incoming data and convert them to actions.
-In \cite{MAV_enabling} they conclude that as of March 2017 no fully autonomous MAV system exist.
+Due to the constraints on the size of MAVs, the existence of fully autonomous MAVs is mainly dependent on the existence of 
+small and efficient enough hardware components such as power supplies, sensors and processors allowing them to quickly process incoming data and convert this information into actions.
+The authors of \cite{MAV_enabling} conclude that as of March 2017 no fully autonomous MAV system exist.
 
-Although a fully autonomous MAV system is yet to be realised, the advancement in transistor density shown in \figref{trans_density}, and continously dimishing price of microprocessors continue to
-allow for faster, and thus more complex, on-board computations. This allows for increased level of autonomy of the MAVs as they can perform ever
+Although a fully autonomous MAV system is yet to be realised, the advancement in transistor density shown in \figref{trans_density}, and the continously dimishing price of microprocessors continue to
+allow for faster, and thus more complex, on-board computations. This allows for enhanced autonomous capabilites of the aircraft \cite{MAV_enabling} as it will be able to perform ever
 more complex computations locally without the aid of other computation units or human interference.
 \begin{figure}[H]
   \centering
-  \includegraphics[width=.6\textwidth]{figs/transistors-per-microprocessor.pdf}
-  \caption{Evolution of number of transistors per microprocessor.}
+  \includegraphics[width=.85\textwidth]{figs/transistors-per-microprocessor.pdf}
+  \caption{Evolution of the number of transistors per microprocessor.}
   \label[fig]{trans_density}
 \end{figure}
-Most MAVs utilize electrical propulsion systems as they are easier to miniaturize, and have faster response time than combustion based systems. Energy is typically stored on
-LiPo batteries. \figref{lion_price} shows how the energy density and price of Lithium-ion batteries have evolved over the last decades. As the energy density of Lithium-ion batteries already have and is projected to continue to increase, this will allow 
+Most MAVs utilize electrical propulsion systems. This is due to the ability to miniaturize electrical propulsion systems for MAV applications with minimal loss of efficiency. Furthermore electrical propulsion systems have faster response time than combustion based systems \cite{MAV_enabling}. Energy is typically stored on
+LiPo batteries. \figref{lion_price} shows how the energy density and price of Lithium-ion batteries have evolved over the last decades. As the energy density of Lithium-ion batteries already have and is projected to continue to increase \cite{lion_density}, this will allow 
 for fitting more power consuming equipment on the MAVs, and increasing their endurance. Thus enabling MAVs to take on more complex and long lasting missions, resulting in an increasing autonomy.
 \begin{figure}
   \centering
-  \includegraphics[width=.6\textwidth]{figs/lion-price.png}
+  \includegraphics[width=.85\textwidth]{figs/lion-price.png}
   \caption{Evolution of energy density and cost of Lithium-ion batteries. Source: \cite{lion}.}
   \label[fig]{lion_price}
 \end{figure}
@@ -44,7 +44,7 @@ at a high enough rate to provide accurate state estimates. Furthermore the use o
 In \cite{svo1} Scaramuzza et al. present a system for autonomous mapping of unknown indoor and outdoor environments performed by a single MAV using SVO. The MAV is supplied with 
 a trajectory it is to follow, and using only on-board processing and sensing follows said trajectory and provides at the same time a real-time map of the environment.
 
-A lot of research has also been put into distributed swarm controll: the task of making a set of MAVs work together to fulfill some collective goal, and doing so 
+A lot of research has also been put into distributed swarm control: the task of making a set of MAVs work together to fulfill some collective goal, and doing so 
 with only local information. In \cite{connectivity_subgradient} De Gennaro and Jadbabaie present a distributed method for optimizing the connectivity of a multi-agent network.
 In their approach each agent knows only the state of its neighbours, where another agent is defined as a neighbour if it fulfills some proximity condition.
 Their approach shows through simulations that the the swarm reaches a configuration that corresponds to a maxima of the second smallest eigenvalue of the Laplacian matrix.
