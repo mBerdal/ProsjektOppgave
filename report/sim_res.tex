@@ -13,7 +13,16 @@ Simulations are done in four different mission spaces with properties summed up 
 \end{center}
 For all mission spaces simulations are performed where the dispersion term is neglected ($k_{1} = 0$), i.e.
 $H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) = L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$, and where the dispersion term
-is present ($k_{1} = 1$).
+is present ($k_{1} = 1$). In all simulations the initial configuration of the swarm is a zigzag patter starting in the bottom
+left corner of the mission space moving upwards. Agents are numbered from top to bottom, meaning the top-most agent is agent $0$, and for 
+a swarm of size $N$ the bottom-most agent is agent $N-1$. Thus the topmost agent will always be the first to optimize its position
+when running Algorithm \ref{alg:alg1}.
+
+Swarm configurations are plotted as follows: The boundary of visible set of an agent is plotted as a dashed line. All areas within the visible set 
+of at least three agents is solid blue. Agents are visualized as orange dots.
+
+In the step length plots, the step length trajectory of each agent is displayed as a uniquely coloured line. For simulations on large swarms
+including legends would cause the figures to have to be unreasonably large. For consistency no step length plots include legends.
 \clearpage
 \input{simulations/tinyworld}
 \clearpage

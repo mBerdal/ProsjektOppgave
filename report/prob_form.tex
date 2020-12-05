@@ -34,7 +34,7 @@ We obtain the estimate for the position of the entity by solving:
 \end{equation}
 The position estimation error is affected by the measurement errors, by the geometry relating sensors and target, and by the estimation algorithm \cite{trilat_error}.
 As the pings sent by the entity that is to be located travel at large velocities (speed of light) the resolution of the internal clock of the entity sets a bound on the accuracy of the estimated position.
-As was found in \cite{CRB_multilat}, multilateration of the unknown position if an entity is most accurate when the entity is placed nearby or within the convex hull of the beacons. Hence spreading
+As was found in \cite{CRB_multilat}, multilateration of the unknown position of an entity is most accurate when the entity is placed nearby or within the convex hull of the beacons. Hence spreading
 the beacons is desirable.
 \figref{trilat_example} shows how the position of an entity can be determined from the known positions of 3 agents.
 \begin{figure}[H]
@@ -157,8 +157,8 @@ We call the swarm consisting of $a$ and its neighbours agent $a$'s local swarm.\
 
 In order to encourage spread of agents in situations where small perturbations of the position of an agent
 causes no or minor changes to the local probability of coverage, we introduce a term causing an agent $a$ to move away
-from another agent $j$. When agents are close to each other we want this dispersion term to induce some velocity in the agents causing
-them to spread. Furthermore we want this velocity to decrease with increasing spread. Due to this we model the dispersion term as:
+from another agent $j$. When agents are close to each other we want this term to induce some velocity in the agents causing
+them to spread. Furthermore we want this velocity to decrease with increasing spread. Due to this we model the proximity of two agents as:
 \begin{equation}\label[eq]{proximity_func}
   D(\mathbf{x}_{a}, \mathbf{x}_{j}) = k_{1}e^{-k_{2}\norm{\mathbf{x}_{a} - \mathbf{x}_{j}}}
 \end{equation}
@@ -168,10 +168,11 @@ Using \eqref{local_objective_derivated} and \eqref{proximity_func}  We now state
 \begin{equation}\label[eq]{local_objective_func}
   H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})  = L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})  - \sum_{j\in\mathcal{B}_{a}}D(\mathbf{x}_{a}, \mathbf{x}_{j})
 \end{equation}
+Due to the negative sign in front of the sum of proximity functions, we will refer to this as the active dispersion term.
 \begin{figure}[H]
   \centering
   \includegraphics[width=.7\textwidth]{figs/close_dist_repell_example.pdf}
-  \caption{Dispersion term in \eqref{proximity_func} for an agent, $a$, and its neighbour, $j$.}
+  \caption{Proximity term in \eqref{proximity_func} for an agent, $a$, and its neighbour, $j$.}
   \label[fig]{cdr}
 \end{figure}
 
@@ -251,7 +252,7 @@ neigbours of agent $a$ lay on a straight line. Using the objective function in \
 \end{subequations}
 where $\mathbf{V}(\cdot)$ is defined in \eqref{V_def} and $\mathbf{v}(\cdot)$ and $\mathbf{l}$ are defined in \eqref{vl}.
 
-In situations where $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = 0$ the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that minimizes the dispersion term in \eqref{proximity_func}.
+In situations where $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = 0$ the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that minimizes the dispersion term in \eqref{local_objective_func}.
 This will cause agent $a$ to move as far away from its neighbours as possible. Such behaviour is undesirable as this might render agent $a$ neighbour-less. For an agent 
 $a$ without neighbous we have $\mathcal{B}_{a} = \emptyset$ and hence $H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) \equiv 0$. Thus re-optimization will result in $\mathbf{x}_{a}$ being unaltered, causing agent $a$
 to stay at $\mathbf{x}_{a}$ indefinately. To prevent such behaviour we impose the constraint \eqref{min_two_neig}. This will prevent agent $a$ from completely disconnecting from its local swarm. 

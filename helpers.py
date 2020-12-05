@@ -128,3 +128,11 @@ def plot_visible_polygon(vis_poly, ax):
       axis.fill(*geom.exterior.xy, color="red")
     vp = max(vis_poly.geoms, key = lambda geom: geom.area)
     plot_visible_polygon(vp, ax)
+
+def plot_distr(X, M, com_radius, ax):
+  cover = get_covered_polygon(X, com_radius, mission_space=M)
+  M.plot(ax)
+  plot_cover(cover, ax)
+  ax.scatter(X[0, :], X[1, :], zorder=100, color="orange")
+  for i in np.arange(X.shape[1]):
+    plot_visible_polygon(get_visible_polygon(X[:, i], com_radius, M), ax)

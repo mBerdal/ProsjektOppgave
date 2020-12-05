@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import numpy as np
 from numpy.lib.arraysetops import isin
 from helpers import get_x_a, get_x_N_sub_a, get_visible_polygon, get_covered_polygon
@@ -105,6 +106,7 @@ class DistrOpt():
     print("OPTIMIZATION STARTED")
     print("covered area: ", get_covered_polygon(X, self.com_radius, self.mission_space).area)
 
+    from helpers import plot_distr
     iters = 0
     while not converged.all() and iters < 100:
       iters += 1
@@ -121,6 +123,7 @@ class DistrOpt():
           print(f"Warning! Agent {a} has less than two neighbours")
       covered_area = get_covered_polygon(X, self.com_radius, self.mission_space).area
       print("covered area: ", covered_area, "iteration: ", iters)
+
       self.X_traj = np.append(self.X_traj, X.reshape(*X.shape, 1), axis=2)
       self.step_length_traj = np.hstack((self.step_length_traj, np.empty((X.shape[1], 1))))
       self.area_traj = np.hstack((self.area_traj, np.array([

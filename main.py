@@ -1,7 +1,7 @@
 from matplotlib.pyplot import box
 from obstacle import *
 from mission_space import MissionSpace
-from helpers import get_covered_polygon, get_visible_polygon, plot_cover, plot_visible_polygon
+from helpers import get_covered_polygon, get_visible_polygon, plot_cover, plot_visible_polygon, plot_distr
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
@@ -9,17 +9,6 @@ bg_clr = "#ededed"
 plt.rcParams['figure.facecolor'] = bg_clr
 from global_opt import GlobalOpt
 from distr_opt import DistrOpt
-
-def plot_distr(X, M, com_radius, ax):
-  cover = get_covered_polygon(X, com_radius, mission_space=M)
-  M.plot(ax)
-  plot_cover(cover, ax)
-  ax.scatter(X[0, :], X[1, :], zorder=100, color="orange")
-  for i in np.arange(X.shape[1]):
-    plot_visible_polygon(get_visible_polygon(X[:, i], com_radius, M), ax)
-    
-
-
 
 def all_spawn(M, X, com_radius, min_dist, d_min, k_1, k_2, fignames = "trash"):
   config_fig, axs = plt.subplots(1, 2)
@@ -60,9 +49,23 @@ def all_spawn(M, X, com_radius, min_dist, d_min, k_1, k_2, fignames = "trash"):
   print("---X_star---")
   print(X_star)
 
+  ###HER###
+
+  x_traj_fig, ex_traj_axs = plt.subplots(2, int((G.X_traj.shape[2]-1)/2))
+  x_traj_fig.set_size_inches(12, 7)
+  ex_traj_axs = ex_traj_axs.flatten()
+
+  for i in np.arange(G.X_traj.shape[2]-1):
+    X = G.X_traj[:, :, i]
+    ex_traj_axs[i].set_title("Initial" if i == 0 else f"After iteration {i}")
+    plot_distr(X, M, com_radius, ex_traj_axs[i])
+  
+  #########
+
   config_fig.savefig(f"report/figs/{fignames}_distr.pdf", format="pdf", dpi=config_fig.dpi)
   area_traj_fig.savefig(f"report/figs/{fignames}_area_traj.pdf", format="pdf", dpi=area_traj_fig.dpi)
   step_traj_fig.savefig(f"report/figs/{fignames}_step_traj.pdf", format="pdf", dpi=step_traj_fig.dpi)
+  x_traj_fig.savefig(f"report/figs/{fignames}_x_traj.pdf", format="pdf", dpi=x_traj_fig.dpi)
 
   plt.show()
 
@@ -82,7 +85,6 @@ def single_spawn(M, N_dots, com_radius, box_bounds, min_dist):
 
 
 if __name__=="__main__":
-  """
   box_bounds = 5
 
 
@@ -116,7 +118,6 @@ if __name__=="__main__":
     [-0.75, 0.75]
   ]), obstacles=[Obstacle.get_centered_box(0.75, 4)])
 
-  """
   bigworld = MissionSpace(np.array([
     [-5, -5],
     [5, -5],
@@ -154,7 +155,7 @@ if __name__=="__main__":
   #complexworld.plot(a)
   #plt.show()
 
-  N_dots = 50
+  N_dots = 6
   com_radius = 3
   min_dist = 0.2
   d_min = 0.1
@@ -162,6 +163,7 @@ if __name__=="__main__":
   X = np.array([
     [-5 + 0.1 + (-1)**(i)*0.05 for i in np.arange(N_dots)],  
     [-5 + (N_dots - i)*0.21 for i in np.arange(N_dots)]
+    #[-5 + (i+1)*0.21 for i in np.arange(N_dots)]
   ])
 
   print(X)
@@ -170,9 +172,9 @@ if __name__=="__main__":
   Test for (k_1, k_2) = [(0, *), (1, 0.5), (1, 1), (1, 2), (2, 0.5), (2, 1), (2, 2)]
   """
 
-  k_1 = 0
+  k_1 = 1
   k_2 = 1
-  all_spawn(complexworld, X, com_radius, min_dist, d_min, k_1, k_2, fignames=f"complexworld_{N_dots}_agnt_k_1_{k_1}_k_2_{k_2}")
+  all_spawn(bigworld, X, com_radius, min_dist, d_min, k_1, k_2, fignames=f"bigworld_{N_dots}_agnt_k_1_{k_1}_k_2_{k_2}")
 
 
   
