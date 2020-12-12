@@ -1,5 +1,36 @@
 \section{System Description}
 
+\subsection{Notation}
+For ease of the reader we include here a brief summary of the notation and mathematical operators used.
+\begin{itemize}
+  \item $\Omega$: Mission space.
+  \item $\mathcal{O}$: Set of obstacles inside the mission space.
+  \item $\mathcal{F}$: Feasible space.
+  \item $\mathbf{x}_{a}$: Position of agent $a$.
+  \item $r_{a}$: Maximum communication range of agent $a$.
+  \item $\hat{p}(\mathbf{x}_{a}, \mathbf{y})$: Local probability of agent $a$ wrt. point $\mathbf{y}$.
+  \item $V_{a}$: Visible set of agent $a$.
+  \item $U_{a}$: Invisible set of agent $a$.
+  \item $\mathbf{X}_{\mathcal{S}}$: Positions of all agents in the swarm $\mathcal{S}$.
+  \item $\mathbf{X}_{\mathcal{S}, a}$: Position of participant $a$ in the swarm $\mathcal{S}$.
+  \item $\Phi^{n}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
+  \item $\Phi^{n^{+}}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ or more members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
+\end{itemize}
+\begin{itemize}
+  \item For a set $\mathcal{S}$ defined by $\mathcal{S} = \{s_{0}\hdots s_{N-1}\},\;N<\infty$ we define:
+  \begin{itemize}
+    \item $|\mathcal{S}| = N$: The size of $\mathcal{S}$.
+    \item $\mathrm{Comb}(\mathcal{S}, n) = \{\mathcal{A}: \mathcal{A}\subseteq\mathcal{S}, |\mathcal{A}|=n\}$: the set of all subsets of $\mathcal{S}$ of size $n$.
+  \end{itemize}
+  \item For a set $\mathcal{S}$ of points $\mathbf{x}\in\mathbb{R}^{N}$ defined by $\mathcal{S} = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x})\leq\mathbf{0}\}$ we define:
+  \begin{itemize}
+    \item $\delta\mathcal{S} = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x}) = \mathbf{0}\}$: The boundary of $\mathcal{S}$.
+    \item $\mathrm{int}(\mathcal{S}) = \{\mathbf{x}\in\mathbb{R}^{N}: f(\mathbf{x}) < \mathbf{0}\}$: The interior of $\mathcal{S}$.
+    \item $A(\mathcal{S})$: The area of the space bounded by $\delta\mathcal{S}$.
+  \end{itemize}
+\end{itemize}
+\clearpage
+
 \subsection{Feasible space}
 As in \cite{sun2014escaping}, a \textit{mission space}, $\Omega$, is defined as a simple polygon 
 \cite{weissteinsimplepolygon}.
@@ -38,8 +69,7 @@ The counterpart to the visible set, called the invisible set of agent $a$, is si
 An example of the visible set for an agent is show in \figref{vis_set_example}.
 
 The probability of an agent $a$ being able to communicate with another entity positioned at a point $\mathbf{y}$, from now on called
-the local probability of agent $a$, is defined according to:
-\todo{Find notation for $\mathbb{R}^{5}$ with non-negative values in last dimension}
+the local probability of agent $a$ with respect to $\mathbf{y}$, is defined according to:
 \begin{equation}\label[eq]{local_prob}
   \hat{p}:\mathbb{R}^{2}\rightarrow [0, 1]\quad\hat{p}(\mathbf{x}_{a}, \mathbf{y}) = \begin{cases}
     p(\norm{\mathbf{x}_{a}-\mathbf{y}}) &, \mathbf{y}\in V_{a}\\
@@ -53,7 +83,6 @@ Where $p(\cdot)$ is a non-increasing function of its argument.
   \caption{Visible set (light blue) for the agent placed at $\mathbf{x}_{a}$ in a rectangular mission space $\Omega$ with two obstacles ($\mathcal{O} = \{o_{0}, o_{1}\}$)}
   \label[fig]{vis_set_example}
 \end{figure}
-\todo{Update figure: $\mathbf{s}_{i}$ should be $\mathbf{x}_{a}$}
 \subsection{Swarm}
 A \textit{swarm}, $\mathcal{S}$ of size $N$ is a set of agents $\{a_{0}\hdots a_{N-1}\}$. The state of the swarm is described by the state of its participants 
 , and is expressed as vector $\mathbf{X}_{\mathcal{S}}\in\mathbb{R}^{2N}$ as shown in \eqref{swarm_state_def}.
@@ -73,7 +102,7 @@ the probability of $n$ members in the swarm, $\mathcal{S}$, being able to commun
 \begin{equation}\label[eq]{Phi_def}
   \Phi^{n}(\mathbf{X}_{\mathcal{S}}, \mathbf{y}) = \sum_{A\in Comb(\mathcal{S}, n)}\prod_{a\in\mathcal{A}}\hat{p}(\mathbf{x}_{a}, \mathbf{y})\prod_{a\in\mathcal{S}\setminus\mathcal{A}}\big(1-\hat{p}(\mathbf{x}_{a}, \mathbf{y})\big)
 \end{equation}
-Later we will use the probability of \textit{at least} n members in a swarm beign able to communicate with an entity placed at $\mathbf{y}$, which is defined as:
+Using \eqref{Phi_def} we define the probability of \textit{at least} n members in a swarm being able to communicate with an entity placed at $\mathbf{y}$ as:
 \begin{equation}\label[eq]{more_than_n_prob}
   \Phi^{n^{+}}(\mathbf{X}_{\mathcal{S}}, \mathbf{y}) = 1 - \sum_{i=0}^{n-1}\Phi^{i}(\mathbf{X}_{\mathcal{S}}, \mathbf{y})
 \end{equation}

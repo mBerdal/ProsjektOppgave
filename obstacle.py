@@ -2,6 +2,15 @@ import numpy as np
 
 class Obstacle():
   @staticmethod
+  def get_box(bottom_left_corner, side_length):
+    return np.array([
+      [bottom_left_corner[0], bottom_left_corner[1]],
+      [bottom_left_corner[0] + side_length, bottom_left_corner[1]],
+      [bottom_left_corner[0] + side_length, bottom_left_corner[1] + side_length],
+      [bottom_left_corner[0], bottom_left_corner[1] + side_length]
+    ])
+  
+  @staticmethod
   def get_centered_box(box_bounds, rel_size):
     return np.array([
       [-box_bounds/rel_size, -box_bounds/rel_size],

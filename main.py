@@ -10,7 +10,7 @@ plt.rcParams['figure.facecolor'] = bg_clr
 from global_opt import GlobalOpt
 from distr_opt import DistrOpt
 
-def all_spawn(M, X, com_radius, min_dist, d_min, k_1, k_2, fignames = "trash"):
+def all_spawn(M, X, com_radius, min_dist, d_min, k_1, k_2, fignames = "trash", plot_steps = False):
   config_fig, axs = plt.subplots(1, 2)
   config_fig.set_size_inches(12, 6)
   xmin, ymin, xmax, ymax = M.bounds
@@ -49,23 +49,20 @@ def all_spawn(M, X, com_radius, min_dist, d_min, k_1, k_2, fignames = "trash"):
   print("---X_star---")
   print(X_star)
 
-  ###HER###
-
-  x_traj_fig, ex_traj_axs = plt.subplots(2, int((G.X_traj.shape[2]-1)/2))
-  x_traj_fig.set_size_inches(12, 7)
-  ex_traj_axs = ex_traj_axs.flatten()
-
-  for i in np.arange(G.X_traj.shape[2]-1):
-    X = G.X_traj[:, :, i]
-    ex_traj_axs[i].set_title("Initial" if i == 0 else f"After iteration {i}")
-    plot_distr(X, M, com_radius, ex_traj_axs[i])
-  
-  #########
-
   config_fig.savefig(f"report/figs/{fignames}_distr.pdf", format="pdf", dpi=config_fig.dpi)
   area_traj_fig.savefig(f"report/figs/{fignames}_area_traj.pdf", format="pdf", dpi=area_traj_fig.dpi)
   step_traj_fig.savefig(f"report/figs/{fignames}_step_traj.pdf", format="pdf", dpi=step_traj_fig.dpi)
-  x_traj_fig.savefig(f"report/figs/{fignames}_x_traj.pdf", format="pdf", dpi=x_traj_fig.dpi)
+
+  if plot_steps:
+    x_traj_fig, ex_traj_axs = plt.subplots(2, int((G.X_traj.shape[2]-1)/2))
+    x_traj_fig.set_size_inches(12, 7)
+    ex_traj_axs = ex_traj_axs.flatten()
+
+    for i in np.arange(G.X_traj.shape[2]-1):
+      X = G.X_traj[:, :, i]
+      ex_traj_axs[i].set_title("Initial" if i == 0 else f"After iteration {i}")
+      plot_distr(X, M, com_radius, ex_traj_axs[i])
+    x_traj_fig.savefig(f"report/figs/{fignames}_x_traj.pdf", format="pdf", dpi=x_traj_fig.dpi)
 
   plt.show()
 
@@ -85,24 +82,6 @@ def single_spawn(M, N_dots, com_radius, box_bounds, min_dist):
 
 
 if __name__=="__main__":
-  box_bounds = 5
-
-
-  
-
-  obstacles = [
-    Obstacle.get_hexagon(2*np.ones((2, )), box_bounds*0.3),
-    Obstacle.get_horizontal_wall(np.array([-4.99, 1]), 5)
-  ]
-  obstacles = []
-
-  M = MissionSpace(
-    np.array([
-      [-box_bounds, -box_bounds],
-      [box_bounds, -box_bounds],
-      [box_bounds, box_bounds],
-      [-box_bounds, box_bounds]
-    ]), obstacles=obstacles)
 
   tinyworld = MissionSpace(np.array([
     [-0.75, -0.75],
@@ -125,15 +104,6 @@ if __name__=="__main__":
     [-5, 5]
   ]))
 
-  bigworld2 = MissionSpace(np.array([
-    [-5, -5],
-    [5, -5],
-    [5, 5],
-    [-5, 5]
-  ]), [
-    Obstacle.get_centered_box(5, 4)
-  ])
-
   complexworld = MissionSpace(np.array([
     [-5, -5],
     [20, -5],
@@ -151,11 +121,29 @@ if __name__=="__main__":
     ) 
   ])
 
-  #f, a = plt.subplots()
-  #complexworld.plot(a)
-  #plt.show()
-
-  N_dots = 6
+  complexworld2 = MissionSpace(np.array([
+    [-5, -5],
+    [5, -5],
+    [5, 5],
+    [-5, 5]
+  ]), obstacles=[
+    Obstacle.get_hexagon(
+      np.array([3, 3]), 1
+    ),
+    Obstacle.get_hexagon(
+      np.array([-4, 2]), 1
+    ),
+    Obstacle.get_hexagon(
+      np.array([2, -2.5]), 2
+    ),
+    Obstacle.get_box(
+      np.array([-2, -1]), 3
+    ),
+    Obstacle.get_vertical_wall(
+      np.array([-4.5, -4]), 5
+    )
+  ])
+  N_dots = 20
   com_radius = 3
   min_dist = 0.2
   d_min = 0.1
@@ -163,10 +151,7 @@ if __name__=="__main__":
   X = np.array([
     [-5 + 0.1 + (-1)**(i)*0.05 for i in np.arange(N_dots)],  
     [-5 + (N_dots - i)*0.21 for i in np.arange(N_dots)]
-    #[-5 + (i+1)*0.21 for i in np.arange(N_dots)]
   ])
-
-  print(X)
 
   """
   Test for (k_1, k_2) = [(0, *), (1, 0.5), (1, 1), (1, 2), (2, 0.5), (2, 1), (2, 2)]

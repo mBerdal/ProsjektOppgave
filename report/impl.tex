@@ -11,7 +11,7 @@ where $1_{\{\cdot\}}$ is the indicator function, which is simply equal to one if
 This implies that the overall probability of coverage over the feasible space in \eqref{rewritten_objective} is simply the area of all intersections of three or more visible sets.
 
 \subsection{Computing the local probability of coverage}
-We partition the neighbours of $a$ into two sets:
+We partition the neighbors of $a$ into two sets:
 \begin{subequations}
   \begin{equation}
     \mathcal{B}_{a V} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in V_{j}\}
@@ -20,8 +20,8 @@ We partition the neighbours of $a$ into two sets:
     \mathcal{B}_{a U} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in U_{j}\}.
   \end{equation}
 \end{subequations}
-Thus for a given point $\mathbf{y}$, the set $\mathcal{B}_{a V}$ contains all neighbours of $a$ whose visible set contains $\mathbf{y}$,
-and $\mathcal{B}_{a U}$ contains all neighbours of agent $a$ whose visible set does not contain $\mathbf{y}$.
+Thus for a given point $\mathbf{y}$, the set $\mathcal{B}_{a V}$ contains all neighbors of $a$ whose visible set contains $\mathbf{y}$,
+and $\mathcal{B}_{a U}$ contains all neighbors of agent $a$ whose visible set does not contain $\mathbf{y}$.
 
 Now the local probability of coverage for agent $a$ can be written as:
 \begin{equation}
@@ -32,7 +32,7 @@ Now the local probability of coverage for agent $a$ can be written as:
     &= \int_{V_{a}}1_{\{|B_{a V}| = 2\}}d\mathbf{y}.
   \end{split}
 \end{equation}
-Thus the value of the local probability of coverage is equal to the area where the visible set of $a$ overlaps with those of excatly two neighbouring agents when assuming perfect communication within the entire visible set.
+Thus the value of the local probability of coverage is equal to the area where the visible set of $a$ overlaps with those of exactly two neighboring agents when assuming perfect communication within the entire visible set.
 
 The intersection area is calculated as follows:
 \begin{equation}\label[eq]{two_neigh_area}
@@ -61,7 +61,7 @@ until all agents are sufficiently close to a local optimum. The procedure is des
      \For{$a\gets 0$ \KwTo $N-1$}{
        $\mathbf{x}_{a, 0}\gets\mathbf{X}_{\mathcal{N}}[a]$\;
        $\mathcal{B}_{a}\gets$ Compute $\mathcal{B}_{a}$ using \eqref{neigh_def} with $\mathbf{x}_{a} = \mathbf{x}_{a, 0}$\;
-       $\mathbf{x}_{a}^{*}\gets$ Solve \eqref{local_opt_prob} with initial guess $\mathbf{x}_{a, 0}$ and neighbours $\mathcal{B}_{a}$\;
+       $\mathbf{x}_{a}^{*}\gets$ Solve \eqref{local_opt_prob} with initial guess $\mathbf{x}_{a, 0}$ and neighbors $\mathcal{B}_{a}$\;
        \If{$\norm{\mathbf{x}_{a}^{*} - \mathbf{x}_{a, 0}}\leq\epsilon$}{
          $\mathbf{C}[a]\gets\mathrm{True}$
        }
@@ -83,9 +83,10 @@ In \cite{kraft1988software} a Nonlinear Program (NLP) is defined as:
     &\mathbf{x}^{lb}\leq\mathbf{x}\leq\mathbf{x}^{ub}
   \end{split}
 \end{equation}
-where $f:\mathbb{R}^{n}\rightarrow\mathbb{R}$ and $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ are assumed to be continuously differentiable. A SQP (Sequential Quadratic Programming) solver finds the solution
-of \eqref{nlp} in an iterative manner. Given an initial guess, $\mathbf{x}_{0}$, of the solution, an SQP solver iteratively solves quadratic sub-problems, generating step size $\alpha_{k}$ and search 
-direction $\mathbf{d}_{k}$. The solution is then updated as:
+where $f:\mathbb{R}^{n}\rightarrow\mathbb{R}$ and $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ are assumed to be continuously differentiable. A SQP (Sequential Quadratic Programming) solver finds one, 
+of possibly many, local minima of $f(\mathbf{x})$ within the feasible space defined by the constraints. The solution
+of \eqref{nlp} is found in an iterative manner. Given an initial guess, $\mathbf{x}_{0}$, of the solution, a SQP solver iteratively solves quadratic sub-problems, generating step size $\alpha_{k}$ and search 
+direction $\mathbf{d}_{k}$. The solution to \eqref{nlp} is then updated as:
 \begin{equation}
   \mathbf{x}_{k+1} = \mathbf{x}_{k} + \alpha_{k}\mathbf{d}_{k}
 \end{equation}
@@ -100,8 +101,8 @@ In all simulations the following parameter values are chosen
      & Variable & Value\\
     \hline
     Maximum communication range & $r$ & $3$\\
-    Minimum distance to neighbours & $r_{min}$ & $0.2$\\
-    Minimum distance to line connecting neighbours & $d_{min}$ & $0.1$\\
+    Minimum distance to neighbors & $r_{min}$ & $0.2$\\
+    Minimum distance to line connecting neighbors & $d_{min}$ & $0.1$\\
     Convergence threshold & $\epsilon$ & $10^{-2}$\\
     Dispersion decay & $k_{2}$ & $1$\\
     Dispersion gain & $k_{1}$ & $\{0, 1\}$

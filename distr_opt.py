@@ -193,5 +193,9 @@ class DistrOpt():
     return np.sum(np.exp(-k_2*np.linalg.norm(X_B_a - x_a.reshape(2, 1), axis=0)))
 
   @staticmethod
+  def potential(x_a, X_B_a):
+    return 0.35*np.sum(1/np.linalg.norm(X_B_a - x_a.reshape(2, 1), axis=0))
+
+  @staticmethod
   def objective(x_a, X_B_a, precomputed_intersections, com_radius, k_1, k_2, mission_space):
     return -DistrOpt.get_area(x_a, precomputed_intersections, com_radius, mission_space) + k_1*DistrOpt.close_dist_repell(x_a, X_B_a, k_2)
