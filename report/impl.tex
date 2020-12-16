@@ -1,6 +1,6 @@
 \section{Implementation}
 \subsection{Local probability}
-We assume that the agents have perfect communication capabilities within their maximum range. Thus we set
+It is assumed that the agents have perfect communication capabilities within their maximum range. The local probability of an agent $a$ wrt. a point $\mathbf{y}$ is defined as:
 \begin{equation}
   \hat{p}(\mathbf{x}_{a}, \mathbf{y}) = \begin{cases}
     1, &\mathbf{y}\in V_{a}\\
@@ -11,7 +11,7 @@ where $1_{\{\cdot\}}$ is the indicator function, which is simply equal to one if
 This implies that the overall probability of coverage over the feasible space in \eqref{rewritten_objective} is simply the area of all intersections of three or more visible sets.
 
 \subsection{Computing the local probability of coverage}
-We partition the neighbors of $a$ into two sets:
+The neighbors of an agent $a$ is partitioned into two sets:
 \begin{subequations}
   \begin{equation}
     \mathcal{B}_{a V} = \{j\in\mathcal{B}_{a}: \mathbf{y}\in V_{j}\}
@@ -24,7 +24,7 @@ Thus for a given point $\mathbf{y}$, the set $\mathcal{B}_{a V}$ contains all ne
 and $\mathcal{B}_{a U}$ contains all neighbors of agent $a$ whose visible set does not contain $\mathbf{y}$.
 
 Now the local probability of coverage for agent $a$ can be written as:
-\begin{equation}
+\begin{equation}\label[eq]{loc_prob_cov_implt}
   \begin{split}
     L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})1_{\{\mathbf{y}\in V_{a}\}}d\mathbf{y} = \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})d\mathbf{y}\\
     &= \int_{V_{a}}\sum_{n = 0}^{2} \Phi^{n}(\mathbf{X}_{\mathcal{B}_{a V}}, \mathbf{y})\Phi^{2-n}(\mathbf{X}_{\mathcal{B}_{a U}},\mathbf{y})d\mathbf{y}\\
@@ -34,7 +34,8 @@ Now the local probability of coverage for agent $a$ can be written as:
 \end{equation}
 Thus the value of the local probability of coverage is equal to the area where the visible set of $a$ overlaps with those of exactly two neighboring agents when assuming perfect communication within the entire visible set.
 
-The intersection area is calculated as follows:
+An alternative way of computing the value of the local probability of coverage in \eqref{loc_prob_cov_implt}, used in the implementation,
+is presented below:
 \begin{equation}\label[eq]{two_neigh_area}
   \begin{split}
     L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= A\Biggr(\bigcup_{\mathcal{A}\in Comb(\mathcal{B}_{a}, 2)}\Bigg[\bigg(V_{a}\cap \bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr)\\
@@ -43,10 +44,10 @@ The intersection area is calculated as follows:
 \end{equation}
 where $A(\cdot)$ returns the area of its argument.
 \subsection{Optimizing swarm configuration}
-Running simulations is done by iteratively solving \eqref{local_opt_prob} for one agent at the time. Meaning at any time there is only
+Running simulations is done by iteratively solving \eqref{local_opt_prob} for one agent at a time. Meaning at any time there is only
 a single agent computing its optimal position while all other agents are static. Once the agent currently computing its optimal position
 has done so, it moves to the optimum. Then the next agent does the same, and so on. This procedure is repeated
-until all agents are sufficiently close to a local optimum. The procedure is described in algorithm \ref{alg:alg1}.
+until all agents are sufficiently close to a local optimum. The procedure is described in Algorithm \ref{alg:alg1}.
 
 \begin{algorithm}[H]
   \SetAlgoLined
@@ -90,7 +91,7 @@ direction $\mathbf{d}_{k}$. The solution to \eqref{nlp} is then updated as:
 \begin{equation}
   \mathbf{x}_{k+1} = \mathbf{x}_{k} + \alpha_{k}\mathbf{d}_{k}
 \end{equation}
-Iteration is performed until some optimality condition is fulfilled \cite{kraft1988software}.\todo{IN HOW MUCH DETAIL SHOULD I EXPLAIN SQP}
+Iteration is performed until some optimality condition is fulfilled \cite{kraft1988software}.
 
 Algorithm \ref{alg:alg1} is implemented in the Python programming language \cite{python}. The Scipy \cite{2020SciPy-NMeth} optimization library implements a wrapper
 for the SQP subroutine proposed in \cite{kraft1988software} which is used for solving \eqref{local_opt_prob}.

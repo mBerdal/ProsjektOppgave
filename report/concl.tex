@@ -1,0 +1,24 @@
+\section{Conclusion}
+In this project a novel distributed probability based coverage optimization algorithm is proposed. The objective of which
+is to, without centralized control, form a network of agents who together can be used as beacons in a 
+multilateration scheme allowing for accurate localization of entities entering the environment.
+
+The distributed objective function consists of a measure of local probability of coverage and a potential field-based measure
+of dispersion. The dispersion term is added so that agents are induced to spread from other agents.
+The algorithm is tested in four environments of different sizes and complexity. In each environment swarms of different sizes
+are deployed, initiated in a dense configuration, and the algorithm is applied with and without actively dispersing agents.
+
+Simulations show that when the proposed algorithm is ran without actively dispersing agents, the swarm of agents
+is prone to converging to configurations in which only a small part of the swarm explores the environment, leading to 
+clearly sub-optimal coverage. 
+This is due to the \textit{local} probability of coverage being a constant function of an agents position in regions covered by four or more agents, 
+leading to zero step size when performing local optimization.
+Applying active dispersion mitigates the problem of agents not exploring the environment. This, in some cases, results in far better 
+coverage as the swarm is able to escape the initial dense configuration.
+However, in environments of smaller sizes simulations show that actively dispersing agents can overshadow the importance of covering area, thus 
+leading to sub-optimal configurations in which maximum dispersion is obtained rather than maximum coverage.
+
+The results presented in this report show that in all tested environments, for all swarm sizes, the proposed algorithm yields
+a configuration in which the covered area is greater than or equal to the initially covered area when only optimizing local probability of coverage. 
+Furthermore it is shown that in some cases adding a dispersion term inducing agents to explore the environment can drastically improve the coverage supplied
+by the swarm of agents.

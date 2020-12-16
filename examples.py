@@ -77,6 +77,39 @@ def plot_trilateration():
   plt.savefig('report/figs/trilateration_example.pdf', format='pdf')
   plt.show()
 
+
+def plot_trilateration2():
+  X = np.array([
+    [0, 0.8, 1.8],
+    [0, 0, 0]
+  ])
+
+  y1 = np.array([0.3, 0.6])
+  y2 = np.array([0.3, -0.6])
+  _, ax = plt.subplots()
+  ax.scatter(*X, color="b")
+  D = np.linalg.norm(y1.reshape(2, 1) - X, axis=0)
+  theta = np.linspace(0, 2*np.pi, 10000)
+  for i in range(3):
+    ax.plot(X[0, i] + D[i]*np.cos(theta), X[1, i] + D[i]*np.sin(theta), "k--")
+    ax.plot(
+      [X[0, i], X[0, i] + D[i]*np.cos(0)],
+      [X[1, i], X[1, i] + D[i]*np.sin(0)],
+      "b"
+    )
+    str_d = "$d_{" + str(i) + "}$"
+    ax.annotate(str_d, xy = (X[0, i] + D[i]/2, X[1, i]+0.1))
+    str_x = "$\mathbf{x}_{" + str(i) + "}$"
+    ax.annotate(str_x, xy = (X[0, i], X[1, i]+0.05))
+  ax.scatter(*y1, color="#4eb53e", zorder=100)
+  ax.annotate("$\mathbf{y}_{1}$", xy=(y1[0]+0.1, y1[1]-0.05))
+  ax.scatter(*y2, color="#4eb53e", zorder=100)
+  ax.annotate("$\mathbf{y}_{2}$", xy=(y2[0]+0.1, y2[1]))
+  ax.axis("equal")
+  ax.axis("off")
+  plt.savefig('report/figs/trilateration_example2.pdf', format='pdf')
+  plt.show()
+
 def plot_intersections():
   M = MissionSpace(np.array([
     [-1.1, -1.1],
@@ -105,7 +138,7 @@ def plot_intersections():
   ax.scatter(*x_3, color="blue", zorder=100, label="$\mathbf{x}_{j},\;j\in\mathcal{N}/\{a\}$")
   plot_visible_polygon(c_3, ax)
   int_a_1 = c_a.intersection(c_1).intersection(c_2).difference(c_3)
-  ax.fill(*int_a_1.exterior.xy, color="blue", alpha=0.3, label="$\{\mathbf{y}:\:\Phi^{2}(\mathbf{X}_{\mathcal{N}/\{a\}}, \mathbf{y})\^{p}_{a}(\mathbf{y}) > 0\}$")
+  ax.fill(*int_a_1.exterior.xy, color="blue", alpha=0.3, label="$\{\mathbf{y}:\:\Phi^{2}(\mathbf{X}_{\mathcal{N}/\{a\}}, \mathbf{y})\^{p}(\mathbf{x}_{a}, \mathbf{y}) > 0\}$")
   int_a_3 = c_a.intersection(c_2).intersection(c_3).difference(c_1)
   ax.fill(*int_a_3.exterior.xy, color="blue", alpha=0.3)
   int_neighs = c_1.intersection(c_2).intersection(c_3)
@@ -228,8 +261,9 @@ def plot_feasible_space():
 if __name__ == "__main__":
   #plot_feasible_space()
   #plot_objective()
+  #plot_trilateration2()
+  plot_intersections()
   exit(0)
   plot_close_dist_repell()
-  plot_intersections()
   plot_trilateration()
   plot_vis_set_example()
