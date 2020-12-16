@@ -202,7 +202,7 @@ neighbors of agent $a$ lay on a straight line. Using the objective function in \
 \end{subequations}
 where $\mathbf{V}(\cdot)$ is defined in \eqref{V_def} and $\mathbf{v}(\cdot)$ and $\mathbf{l}$ are defined in \eqref{vl}.
 
-In situations where the local probability of coverage of agent $a$ constant, i.e. $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = 0$, the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that minimizes the dispersion term in \eqref{local_objective_func}.
+In situations where the local probability of coverage of agent $a$ is constant, i.e. $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = \mathbf{0}$, the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that minimizes the dispersion term in \eqref{local_objective_func}.
 This will cause agent $a$ to move as far away from its neighbors as possible. Such behavior is undesirable as this might render agent $a$ neighbor-less. An agent 
 $a$ without neighbors fulfills $\mathcal{B}_{a} = \emptyset$ and hence $H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) \equiv 0$. Thus re-optimization will result in $\mathbf{x}_{a}$ being unaltered, causing agent $a$
 to stay at $\mathbf{x}_{a}$ indefinitely. To prevent such behavior the constraint \eqref{min_two_neig} is imposed. This will prevent agent $a$ from completely disconnecting from its local swarm. 

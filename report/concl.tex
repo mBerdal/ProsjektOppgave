@@ -1,7 +1,7 @@
 \section{Conclusion}
 In this project a novel distributed probability based coverage optimization algorithm is proposed. The objective of which
 is to, without centralized control, form a network of agents who together can be used as beacons in a 
-multilateration scheme allowing for accurate localization of entities entering the environment.
+multilateration scheme allowing for accurate localization of entities entering the environment in which the agents are located.
 
 The distributed objective function consists of a measure of local probability of coverage and a potential field-based measure
 of dispersion. The dispersion term is added so that agents are induced to spread from other agents.
@@ -21,4 +21,6 @@ leading to sub-optimal configurations in which maximum dispersion is obtained ra
 The results presented in this report show that in all tested environments, for all swarm sizes, the proposed algorithm yields
 a configuration in which the covered area is greater than or equal to the initially covered area when only optimizing local probability of coverage. 
 Furthermore it is shown that in some cases adding a dispersion term inducing agents to explore the environment can drastically improve the coverage supplied
-by the swarm of agents.
+by the swarm of agents. However, seen as the algorithm lacks robustness it can not yet be utilized in real world situations. Work on the deployment problem
+will continue in an upcoming master's thesis. There, the problems presented in this report will be addressed, and hopefully result in a solution that can
+be utilized during search-and-rescue missions.

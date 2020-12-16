@@ -9,26 +9,25 @@ The set of neighbors is defined so that two agents are neighbors if the distance
 Thus in reality, if the graph of agents is not connected, it might not be possible for an agent to determine its neighbors as there might not be any way for 
 the information to propagate to an agents neighbors.
 
-\paragraph{Properly weighting of the active dispersion term}
+\paragraph{Proper weighting of the active dispersion term}
 Through simulations in the Tinyworld2 environment it is clear that the proposed objective function \eqref{local_objective_func} is 
 prone to a poorly weighted dispersion term. It is clear that the dispersion gain should not be constant, 
 as the agents shift behavior when the local probability of coverage \eqref{local_objective_derivated} is small. Due to this,
 the possibility of letting the dispersion gain vary with the local probability of coverage should be considered. 
 
 A two-phase 
-approach could also be investigated. Phase one could cause agents to spread throughout the mission space (possibly using the vertical fields
+approach could also be investigated. Phase one could cause agents to spread throughout the mission space (possibly using the potential fields
 approach in \cite{pot_field}) while ensuring connectivity of the graph spanned by the agents. In phase two agents could optimize some
 measure of multilateration cover (and multilateration quality).
 
 The possibility of adapting the boosting function approach presented in \cite{sun2014escaping} could also be examined. Using boosting
-functions there might not be a need for an explicit dispersion term, and the problem of an improperly weighted dispersion term
-would be eliminated altogether.
+functions there might not be a need for an explicit dispersion term, and the problem of improper weighting would be eliminated altogether.
 
 \paragraph{Prevent tight clustering}
 Throughout the simulations it became evident that the agents have a tendency to form tight clusters of three agents.
 As multilateration yields the most accurate results for entities positioned inside or around the convex hull of agents,
 such behavior is undesirable. Thus maximizing the joint probability of three or more agents covering the area might not be the 
-correct approach when the overall goal is deploy a network for \emph{accurate} multilateration. Due to this more research should be made into
+optimal approach when the overall goal is deploy a network for \emph{accurate} multilateration. Due to this more research should be made into
 optimal geometries between beacons used for multilateration, and an alternative objective functions might need to be considered.
 
 \paragraph{Avoid visible set being clipped by mission space boundary}
@@ -38,6 +37,6 @@ Some coordinated moves for local swarms should be allowed in order to prevent th
 clearly sub-optimal configurations. Letting the feasible space boundaries exert some virtual force (as in \cite{pot_field}) could be 
 applied to move agents away from the boundaries.
 
-\paragraph{Simultaneous simulation} In reality, making a single agent perform optimization at any given time would demand
+\paragraph{Concurrent simulation} In reality, making a single agent perform optimization at any given time would demand
 a lot of coordination between agents, as it would have to be communicated and agreed upon which agent should perform optimization.
 Due to this the possibility of letting multiple agents move at the same time should be investigated.

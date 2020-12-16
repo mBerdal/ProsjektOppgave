@@ -38,8 +38,8 @@ An alternative way of computing the value of the local probability of coverage i
 is presented below:
 \begin{equation}\label[eq]{two_neigh_area}
   \begin{split}
-    L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= A\Biggr(\bigcup_{\mathcal{A}\in Comb(\mathcal{B}_{a}, 2)}\Bigg[\bigg(V_{a}\cap \bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr)\\
-    &= A\Biggr(V_{a}\cap\bigcup_{\mathcal{A}\in Comb(\mathcal{B}_{a}, 2)}\Bigg[\bigg(\bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr),
+    L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) &= A\Biggr(\bigcup_{\mathcal{A}\in \mathrm{Comb}(\mathcal{B}_{a}, 2)}\Bigg[\bigg(V_{a}\cap \bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr)\\
+    &= A\Biggr(V_{a}\cap\bigcup_{\mathcal{A}\in \mathrm{Comb}(\mathcal{B}_{a}, 2)}\Bigg[\bigg(\bigcap_{i\in\mathcal{A}}V_{i}\bigg)\setminus\bigg(\bigcup_{j\in\mathcal{B}_{a}\setminus\mathcal{A}}V_{j}\bigg)\Bigg]\Biggr),
   \end{split}
 \end{equation}
 where $A(\cdot)$ returns the area of its argument.
