@@ -1,7 +1,7 @@
 \section{Background}\label[sec]{background}
 \subsection{Potential, Limitations and Progress of the MAV}
 Micro Areal Vehicles (MAVs) have great potential in contributing to indoor search-and-rescue missions. Their small size and weight
-make them easy to transport and allows for rapid field deployment. Furthermore they are agile, allowing them to operate in 
+make them easy to transport and allows for rapid field deployment. Furthermore, they are agile, allowing them to operate in 
 complex environments and access hard-to-get-to places.
 
 Limitations of current technologies, prohibiting the existence of fully autonomous MAVs, are examined in \cite{MAV_enabling}. They define the following
@@ -12,8 +12,8 @@ requirements for a fully autonomous MAV:
   \item Unsupervised learning: The ability to adapt and learn its own control strategies without human supervision.
 \end{itemize}
 Due to the constraints on the size of MAVs, the existence of fully autonomous MAVs is mainly dependent on the existence of 
-small and efficient hardware components such as power supplies, sensors and processors allowing them to quickly process incoming data and convert this information into actions.
-The authors of \cite{MAV_enabling} conclude that as of March 2017 no fully autonomous MAV system exist.
+small and efficient hardware components such as power supplies, sensors, and processors allowing them to quickly process incoming data and convert this information into actions.
+The authors of \cite{MAV_enabling} conclude that as of March 2017 no fully autonomous MAV system exists.
 
 Although a fully autonomous MAV system is yet to be realized, the advancement in transistor density shown in \figref{trans_density}, and the continuously diminishing price of microprocessors continue to
 allow for faster, and thus more complex, on-board computations. This allows for enhanced autonomous capabilities of the aircraft \cite{MAV_enabling}. Increased onboard computation power enables the aircraft to perform 
@@ -32,20 +32,22 @@ computations of increased complexity locally without the aid of other computatio
   \label[fig]{trans_density}
 \end{figure}
 
-Most MAVs utilize electrical propulsion systems. This is due to the ability to miniaturize electrical propulsion systems for MAV applications with minimal loss of efficiency. Furthermore electrical propulsion systems have faster response time than combustion based systems \cite{MAV_enabling}. Energy is typically stored on
-LiPo\footnote{Lithium-ion polymer} batteries. \figref{lion_price} shows how the energy density and price of Lithium-ion batteries have evolved over the last decades. As the energy density of Lithium-ion batteries already have and is projected to continue to increase \cite{lion_density}, this will allow 
-for fitting more power consuming equipment on the MAVs, and increasing their endurance. Thus enabling MAVs to take on more complex and long lasting missions, resulting in increased autonomy.
+Most MAVs utilize electrical propulsion systems. This is due to the ability to miniaturize electrical propulsion systems for MAV applications with minimal loss of efficiency. 
+Additionally, electrical propulsion systems have faster response time than combustion-based systems \cite{MAV_enabling}. Energy is typically stored on
+LiPo\footnote{Lithium-ion polymer} batteries. \figref{lion_price} shows how the energy density and price of Lithium-ion batteries have evolved over the last decades. 
+As the energy density of Lithium-ion batteries already have, and is projected to continue to increase \cite{lion_density}, 
+the endurance of MAVs have, and will continue to, increase. Furthermore, more power-consuming equipment can be fitted on the MAVs, thus enabling MAVs to take on more complex and long-lasting missions, resulting in increased autonomy.
 
 Not only hardware components have made leaps over the last decades. The advancement in autonomy of MAV systems through the creation of efficient and lightweight software has been a field of great scientific interest.
 The Robotics \& Perception Group at the University of Z\"urich have performed excessive research into the field of visual-inertial based real-time navigation and mapping
 by MAVs in GNSS denied environments \cite{svo2, svo1}. The goal of which is enabling MAVs to localize themselves in and map unknown environments without external aid.
 
-In \cite{svo2} a fast and robust visual-odometry algorithm (SVO) is presented. The method is faster than previously presented methods, and is therefore especially useful 
-for MAV operations as it should be able to run on a onboard computer with limited processing power. It is concluded that the method is especially useful for state estimation onboard MAVs as the algorithm runs
+In \cite{svo2} a fast and robust visual-odometry algorithm (SVO) is presented. The method is faster than previously presented methods and is therefore especially useful 
+for MAV operations as it should be able to run on an onboard computer with limited processing power. It is concluded that the method is especially useful for state estimation onboard MAVs as the algorithm runs
 at a high enough rate to provide accurate state estimates. Furthermore, the use of depth-filters yields an accurate map of the environment with few outliers.
 
 In \cite{svo1} Scaramuzza et al. present a system for autonomous mapping of unknown indoor and outdoor environments performed by a single MAV using SVO. The MAV is supplied with 
-a trajectory it is to follow, and using only on-board processing and sensing, follows said trajectory and provides at the same time a real-time map of the environment.
+a trajectory to follow, and using only onboard processing and sensing, follows said trajectory and provides at the same time a real-time map of the environment.
 
 Developments such as those in \cite{svo2} and \cite{svo1} have increased the autonomous capabilities of MAVs, and as time passes more efficient software solutions will continue to do so.
 
@@ -53,24 +55,24 @@ Developments such as those in \cite{svo2} and \cite{svo1} have increased the aut
 Multi-agent distributed control is the task of making a set of agents work together to fulfill some collective goal, and doing so 
 with only local information. One such task is studied in this report, self-deployment: Make a swarm of robots "[...] deploy 
 themselves in an environment without central coordination"\cite{BAYINDIR2016292}. A subcategory of the deployment problem is referred to 
-in literature as the blanket coverage problem. In \cite{BAYINDIR2016292} the blanket coverage problem is defined as the task of finding a static 
+in the literature as the blanket coverage problem. In \cite{BAYINDIR2016292} the blanket coverage problem is defined as the task of finding a static 
 configuration of agents such that a cost function is maximized over an area.
 
-Cassandras and Zhong present in \cite{cassandras} a distributed method for a multi-agent blanket coverage.
-They approach the blanket coverage problem using a probability based objective function. With their approach the 
+Cassandras and Zhong present in \cite{cassandras} a distributed method for multi-agent blanket coverage.
+They approach the blanket coverage problem using a probability-based objective function. With their approach, the 
 goal of the set of agents is maximizing the joint detection probability of randomly occurring events in the environment. 
-They also present an algorithm that preserves connectivity of the network of agents. They conclude that using their method, the swarm of agents reach a configuration corresponding to a 
-local maxima of the joint detection probability function. Furthermore they find that when connectivity preservation is imposed, the swarm settles at a configuration in which the joint detection probability is
+They also present an algorithm that preserves the connectivity of the network of agents. They conclude that using their method, the swarm of agents reach a configuration corresponding to a 
+local maximum of the joint detection probability function. Furthermore, they find that when connectivity preservation is imposed, the swarm settles at a configuration in which the joint detection probability is
 smaller than when connectivity of the network is not taken into account.
 
 In \cite{sun2014escaping} Cassandras and Zhong "[...] address the problem of multiple local optima
-commonly arising in optimization problems for multi-agent systems[...]". Utilizing the same probability based objective function as in \cite{cassandras}, boosting functions are applied to encourage agents to explore poorly
+commonly arising in optimization problems for multi-agent systems[...]". Utilizing the same probability-based objective function as in \cite{cassandras}, boosting functions are applied to encourage agents to explore poorly
 covered regions of the area and escape local optima. Three families of boosting functions are defined and tested through simulations. It is shown that the objective value post boosting is no worse than before.
 
 Howard et.al. present in \cite{pot_field} another approach to the blanket coverage problem: virtual potential fields. It is assumed that 
-agents are able to determine the range and bearing to both nearby agents and obstacles. Drawing inspiration from 
-electrostatic fields, agents are seen on as point charges who exert repulsive forces on one another, causing them to spread. Furthermore
-obstacles also exert forces on the agents so that agents do not collide with obstacles in the environment. They show through simulations
+agents can determine the range and bearing to both nearby agents and obstacles. Drawing inspiration from 
+electrostatic fields, agents viewed as point charges who exert repulsive forces on one another, causing them to spread. 
+Obstacles also exert forces on the agents so that agents do not collide with obstacles in the environment. They show through simulations
 that the potential field approach can be used to deploy multi-agent networks for the means of blanket coverage, and conclude that area
 coverage emerges from a combination of "[...] purely local rules"\cite{pot_field}.
 
@@ -85,7 +87,7 @@ of an entity, denoted by $\mathbf{y}\in\mathbb{R}^{2}$, can be determined as fol
 \begin{enumerate}
   \item The entity broadcasts signal and starts a timer at $t_{0}$.
   \item Beacons at $\mathbf{x}_{a},\; 0\leq a<n$ receive broadcasted signal and immediately responds with a packet containing $\mathbf{x}_{a}$.
-  \item When receiving the packet from beacon at $\mathbf{x}_{a}$, the entity stores the time of reception in a variable $t_{1, a}$.
+  \item When receiving the packet from the beacon at $\mathbf{x}_{a}$, the entity stores the time of reception in a variable $t_{1, a}$.
   \item When at least 3 beacons have responded, the entity calculates the distance
   from itself to beacon at $\mathbf{x}_{a}$: $d_{a} = \frac{1}{2}s(t_{1, a} - t_{0})$, where $s$ is the propagation speed of the signal. The factor $\frac{1}{2}$ is due to the signal traveling
   two times the distance between the entity and the beacon placed at $\mathbf{x}_{a}$ (the ping travels from the entity to the agent, and the packet

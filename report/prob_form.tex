@@ -30,8 +30,8 @@ with the local probability of agent $a$ as the interpolation variable. Low local
 the swarm excluding agent $a$. In the extreme case where the local probability of agent $a$ is zero, the probability of covering $\mathbf{y}$ depends only on the coverage supplied by the swarm excluding agent $a$.
 
 Higher local probability of agent $a$ means that the contribution of $a$ towards covering the point $\mathbf{y}$ is greater. 
-Thus less weight is put on the the probability of the swarm excluding agent $a$ covering the point. Instead more weight is put on the probability of at least \textit{two} other agents being able to communicate with an entity at $\mathbf{y}$. 
-This is due to the fact that the probability of agent $a$ being able to communicate with said entity is higher, and only two or more agents must to be able to communicate with the entity at $\mathbf{y}$ to make the total number of agents covering $\mathbf{y}$ three or more.
+Thus less weight is put on the probability of the swarm excluding agent $a$ covering the point. Instead, more weight is put on the probability of at least \textit{two} other agents being able to communicate with an entity at $\mathbf{y}$. 
+This is due to the fact that the probability of agent $a$ being able to communicate with the entity is higher, and only two or more agents must be able to communicate with the entity at $\mathbf{y}$ to make the total number of agents covering $\mathbf{y}$ three or more.
 
 \begin{figure}[H]
   \centering
@@ -92,15 +92,15 @@ $\Phi^{n}(\mathbf{X}_{\mathcal{C}_{a}}, \mathbf{y}) = 0\;\forall\;n\in\mathbb{Z}
   \begin{split}
     P_{a}(\mathbf{X}_{\mathcal{N}}) &= \int_{V_{a}}\Big(\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y}) + \Phi^{2}(\mathbf{X}_{\mathcal{C}_{a}}, \mathbf{y}) + \Phi^{1}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})\Phi^{1}(\mathbf{X}_{\mathcal{C}_{a}}, \mathbf{y})\Big)\hat{p}(\mathbf{x}_{a}, \mathbf{y})d\mathbf{y}\\
     &+ \int_{U_{a}}\Big(\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y}) + \Phi^{2}(\mathbf{X}_{\mathcal{C}_{a}}, \mathbf{y}) + \Phi^{1}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})\Phi^{1}(\mathbf{X}_{\mathcal{C}_{a}}, \mathbf{y})\Big)\hat{p}(\mathbf{x}_{a}, \mathbf{y})d\mathbf{y}\\
-    &= \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})p(\norm{\mathbf{x}_{a}-\mathbf{y}})d\mathbf{y} = L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}).
+    &= \int_{V_{a}}\Phi^{2}(\mathbf{X}_{\mathcal{B}_{a}}, \mathbf{y})p(\norm{\mathbf{x}_{a}-\mathbf{y}})d\mathbf{y} = L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}),
   \end{split}
 \end{equation}
-Thus the local probability of coverage for an agent $a$ is dependent on the position, $\mathbf{x}_{a}$, of agent $a$ in both domain and integrand, and the positions of the neighbors of agent $a$.
+where it is used that $\hat{p}(\mathbf{x}_{a}, \mathbf{y}) = p(\norm{\mathbf{x}_{a}-\mathbf{y}})\;\forall\;\mathbf{y}\in V_{a}$. Thus the local probability of coverage for an agent $a$ is dependent on the position, $\mathbf{x}_{a}$, of agent $a$ in both domain and integrand, and the positions of the neighbors of agent $a$.
 The set of agents consisting of agent $a$ and its neighbors will be referred to as agent $a$'s local swarm.\clearpage
 
 As discussed in subsection \ref{trilat} it is beneficial that agents used for multilateration spread out to some extent in order to ensure sufficient accuracy of multilateration.
 Furthermore ensuring that agents spread throughout the mission space is desirable. 
-In order to explicitly encourage spread of agents, a term penalizing an agent $a$ for being close to another agent $j$ is introduced. 
+In order to explicitly encourage agents to spread, a term penalizing an agent $a$ for being close to another agent $j$ is introduced. 
 When agents are close to each other this term should induce some velocity in the agents causing
 them to spread.
 In \cite{pot_field} virtual potential fields are used to disperse agents. There the potential between an agent $a$ and its neighbor $j$ is modelled as:
@@ -125,11 +125,11 @@ Due to the negative sign in front of the sum of proximity functions this will be
   \caption{Proximity term in \eqref{proximity_func} for an agent, $a$, and its neighbor, $j$.}
   \label[fig]{cdr}
 \end{figure}
-
+\clearpage
 \subsection{Constraints}\label[secc]{constraints}
 It is clear from subsection \ref{trilat} that agents used as beacons in a multilateration scheme cannot be positioned on a straight line, as this would make it impossible
 to uniquely determine the unknown position of an entity. Only agents close to an entity whose position is to be determined will
-take part in the multilateration scheme. Due to this it is imposed that only agents that together can be used for multilateration must satisfy the non-linear position requirement.
+take part in the multilateration scheme. Due to this, it is imposed that only agents that together can be used for multilateration must satisfy the non-linear position requirement.
 
 For an agent $a$ with $N$ neighbors $j\in\mathcal{B}_{a},\:|B_{a}|=N$ the matrix $\mathbf{V}$ is constructed according to:
 \begin{equation}\label[eq]{V_def}
@@ -202,7 +202,7 @@ neighbors of agent $a$ lay on a straight line. Using the objective function in \
 \end{subequations}
 where $\mathbf{V}(\cdot)$ is defined in \eqref{V_def} and $\mathbf{v}(\cdot)$ and $\mathbf{l}$ are defined in \eqref{vl}.
 
-In situations where the local probability of coverage of agent $a$ is constant, i.e. $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = \mathbf{0}$, the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that minimizes the dispersion term in \eqref{local_objective_func}.
+In situations where the local probability of coverage of agent $a$ is constant, i.e. $\frac{\partial L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})}{\partial \mathbf{x}_{a}} = \mathbf{0}$, the solution of \eqref{totally_objective} will be achieved at the position $\mathbf{x}_{a}$ that maximizes the dispersion term in \eqref{local_objective_func}.
 This will cause agent $a$ to move as far away from its neighbors as possible. Such behavior is undesirable as this might render agent $a$ neighbor-less. An agent 
 $a$ without neighbors fulfills $\mathcal{B}_{a} = \emptyset$ and hence $H(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}}) \equiv 0$. Thus re-optimization will result in $\mathbf{x}_{a}$ being unaltered, causing agent $a$
 to stay at $\mathbf{x}_{a}$ indefinitely. To prevent such behavior the constraint \eqref{min_two_neig} is imposed. This will prevent agent $a$ from completely disconnecting from its local swarm. 

@@ -34,18 +34,18 @@ The results obtained in \Cref{sec:results} are summarized in Table \ref{tab:sim_
 %is a combination of local probability of coverage and dispersion. With this in mind it would make sense if Algorithm \ref{alg:alg1}
 %yielded higher percentage of coverage when active dispersion is not applied, as all agents solely focus on maximizing their local probability of coverage.
 %The reasons why this is not the case is due to active dispersion forcing agents to explore.
-\subsection{Covered percentage of feasible space}
+\subsection{Coverage percentage of feasible space}
 As the results in Table \ref{tab:sim_res_worlds} show, running Algorithm \ref{alg:alg1} without active dispersion yields configurations where the 
-final coverage is always equal to or better than the initial coverage in terms of covered percentage. The only environment in which the coverage is not approved upon is the Tinyworld environment.
+final coverage is always equal to or better than the initial coverage in terms of coverage percentage. The only environment in which the coverage is not approved upon is the Tinyworld environment.
 This is due to the Tinyworld environment being constructed so that, in any configuration, 3 or more agents cover the entire feasible space.
 
-When applying active dispersion Algorithm \ref{alg:alg1} returns configurations where the final covered percentage is higher than the initial covered percentage in all environments
+When applying active dispersion Algorithm \ref{alg:alg1} returns configurations where the final coverage percentage is higher than the initial coverage percentage in all environments
 except for the Tinyworld2 environment. The reason for the diminishing percentage of coverage in the Tinyworld2 environment is discussed in \Cref{secc:improp_weight_disc}.
 
 \subsection{Clustering}
-In all simulations agents tend to gather in groups of three, and cluster as closely together as the constraints \eqref{min_dist_neigh}-\eqref{non_linear_neighb} allow.  
-This behavior is especially prevalent when there are not enough agents to cover the entire feasible space, and when active dispersion is not applied. This is due to 
-the fact that the intersection of three circles is largest in area when the circle centers coincide. Considering the results in \cite{CRB_multilat} such behavior is disadvantageous. The region in which
+In all simulations, agents tend to gather in groups of three, and cluster as closely together as the constraints \eqref{min_dist_neigh}-\eqref{non_linear_neighb} allow.  
+This behavior is especially prevalent when there are not enough agents to cover the entire feasible space, and when active dispersion is not applied. This a consequence 
+of the area of the intersection of three circles being largest when the circle centers coincide. Considering the results in \cite{CRB_multilat} such behavior is disadvantageous. The region in which
 the accuracy of multilateration (in presence of measurement noise) is the greatest lies in and around the convex hull of the agents. Tight clustering yields a small convex hull, 
 meaning the region in which accurate multilateration can be performed is small.
 
@@ -59,41 +59,39 @@ local optimization problem \eqref{local_opt_prob} is equivalent to maximizing di
 
 Simulations performed in the Rectworld environment for 15 agents exhibit some of the same behavior. The final configuration obtained when active dispersion
 is applied is shown in \figref{fig:15_agnt_bw_k_1_1_k_2_1_distr}. Comparing this to the configuration obtained in the same environment with the same number of agents (see \figref{fig:15_agnt_bw_k_1_0_k_2_1_distr}), 
-it is clear that the agents are more evenly spread out in the mission space when active dispersion is used. In densely populated areas the gradient of the local probability of coverage tends be small. This is due to the fact that in densely populated areas, 
-the majority of the area is covered independently of an agent $a$ covering it or not. Thus any small perturbation of an agents position does not have a major impact on
-the agents local probability of coverage. As the number of neighbors for an agent in a densely populated area is large, the dispersion term is significantly negative and has a steep gradient.
-This combination of movement having a small impact on the local probability of coverage, and a large impact on the value of the dispersion term causes agents to move away from densely populated areas, 
-preventing clustering. The percentage of covered area is however two percent smaller when using active dispersion for a swarm of 15 agents in the Rectworld area than when only optimizing local probability of coverage.
+it is clear that the agents are more evenly spread out in the mission space when active dispersion is used. In densely populated areas the gradient of the local probability of coverage tends to be small. This is due to the fact that in densely populated areas, 
+the majority of the area is covered independently of an agent $a$ covering it or not. Thus any small perturbation of an agent's position does not have a major impact on
+the agent's local probability of coverage. As the number of neighbors for an agent in a densely populated area is large, the dispersion term is significantly negative and has a steep gradient.
+This combination of movement having a small impact on the local probability of coverage and a large impact on the value of the dispersion term causes agents to move away from densely populated areas, 
+preventing clustering. The coverage percentage is however two percent smaller when using active dispersion for a swarm of 15 agents in the Rectworld area than when only optimizing the local probability of coverage.
 
 Active dispersion does however not prevent clustering in sparsely populated areas. This can be seen by the configurations for 3 and 6 agents in the
-Rectworld environment (\Cref{fig:3_agnt_bw_k_1_1_k_2_1_distr} and \Cref{fig:6_agnt_bw_k_1_1_k_2_1_distr}). In these configurations any
+Rectworld environment (\Cref{fig:3_agnt_bw_k_1_1_k_2_1_distr} and \Cref{fig:6_agnt_bw_k_1_1_k_2_1_distr}). In these configurations, any
 movement from the current configuration would cause the local
-probability of coverage for the agent that moves to drop significantly. Furthermore none of the agents have enough neighbors to force them to move despite
+probability of coverage for the agent that moves to drop significantly. Furthermore, none of the agents have enough neighbors to force them to move despite
 the drop in local probability of coverage.
 
 \subsection{Effect of improperly weighted active dispersion}\label{secc:improp_weight_disc}
 The simulations performed for a swarm of size 3 in the Tinyworld2 environment display a weakness of active dispersion. Here the swarm covers a significantly smaller percentage of the 
-feasible space when applying active dispersion than when not. This is due to the fact that the dispersion term is weighted to heavily. When the local probability of coverage for an agent is small, i.e. $L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$ is small 
+feasible space when applying active dispersion than when not. This is due to the fact that the dispersion term is weighted too heavily. When the local probability of coverage for an agent is small, i.e. $L(\mathbf{X}_{\mathcal{B}_{a}\cup\{a\}})$ is small 
 for all possible values of $\mathbf{x}_{a}$, the value of 
 the local objective \eqref{totally_objective} is dominated by the dispersion term. This causes a shift in behavior. The focus is on dispersion rather than coverage, and Algorithm \ref{alg:alg1} converges
-to a solution that gives a smaller percentage of covered area.
+to a solution that gives a smaller coverage percentage.
 
-For a swarm of 6 agents in the Tinyworld2 environment the case is quite different. Now active dispersion yields a configuration that gives a larger coverage percentage than when no active
-dispersion is applied. This result is although not a consequence of clever objective function formulation. As for three agents the active dispersion term dominates the coverage term
+For a swarm of 6 agents in the Tinyworld2 environment, the case is quite different. Now active dispersion yields a configuration that gives a larger coverage percentage than when no active
+dispersion is applied. This result is although not a consequence of clever objective function formulation. As for three agents, the active dispersion term dominates the coverage term
 in \eqref{totally_objective} due to the local probability of coverage being small no matter the value of $\mathbf{x}_{a}$. Hence the agents focus on maximizing dispersion rather than covered area. The 
 solution generated by Algorithm \ref{alg:alg1} for 6 agents in the Tinyworld2 environment is identical to the solution generated for 6 agents in the Tinyworld environment when applying active dispersion. 
-This makes it obvious that the high percentage of coverage obtained in the Tinyworld2 environment using active dispersion is not caused by the agents meticulously positioning themselves as to maximize the local
-probability of coverage. Instead they position themselves so that the maximum dispersion is obtained, and the higher percentage of coverage is simply a lucky bi-effect.
-
+This makes it obvious that the high percentage of coverage obtained in the Tinyworld2 environment using active dispersion is not caused by the agents meticulously positioning themselves in order to maximize the local
+probability of coverage. Instead, they position themselves so that the maximum dispersion is obtained, and the higher percentage of coverage is obtained coincidentally.
 
 \subsection{Active dispersion forcing exploration}
-
 \figref{fig:6_agnt_bw_k_1_0_k_2_1_distr} shows the configuration obtained
 by running Algorithm \ref{alg:alg1} for a swarm of size 6 in the Rectworld environment  without active dispersion. The three agents in the bottom-left corner stay
 at their initial positions throughout the simulation even though the bottom left corner is covered by all 6 agents. As the minimum requirement for coverage is three agents, the swarm could 
 clearly be utilized to give a higher percentage of coverage. \figref{fig:bw_x_traj} shows the configuration of the swarm after each iteration of Algorithm \ref{alg:alg1}. It is clear that 
 throughout the iterations the visible sets of the bottom three agents are covered by those of the top three agents. Thus the local objective value for the bottom three agents is zero 
-throughout the iterations, and any infinitesimal perturbation of their positions cause no change to the objective value, i.e. zero gradient. The SQP solver concludes that the bottom three agents are at local
+throughout the iterations, and any infinitesimal perturbation of their positions causes no change to the objective value, i.e. zero gradients. The SQP solver concludes that the bottom three agents are at local
 optima at each iteration, and no change is made to their position. 
 
 The configuration generated for a swarm of size 6 using active dispersion in the Rectworld environment (see \figref{fig:6_agnt_bw_k_1_1_k_2_1_distr}) does not exhibit the same behavior as the aforementioned configuration. This can be attributed to the
@@ -113,13 +111,13 @@ local objective in every iteration of Algorithm \ref{alg:alg1} due to their visi
 reach a far higher percentage of coverage than when no active dispersion is applied.
 
 \subsection{Local convergence causing sub-optimal configurations}
-For a swarm of 3 agents in the Rectworld environment the final configurations obtained with 
+For a swarm of 3 agents in the Rectworld environment, the final configurations obtained with 
 and without active dispersion are shown in 
-\Cref{fig:3_agnt_bw_k_1_1_k_2_1_distr} and \Cref{fig:3_agnt_bw_k_1_0_k_2_1_distr} respectively. It is clear that the two configurations do not differ much, except that the configuration obtained when using active dispersion
+\Cref{fig:3_agnt_bw_k_1_1_k_2_1_distr} and \Cref{fig:3_agnt_bw_k_1_0_k_2_1_distr} respectively. The two configurations do not differ much, except that the configuration obtained when using active dispersion
 is translated slightly to the north-east. As shown in \figref{fig:3_agnt_bw_k_1_0_s_traj} and \figref{fig:3_agnt_bw_k_1_1_s_traj} the agents make larger initial steps when active dispersion is applied. This
 causes them to move further into the mission space. Thus less of their visual sets are clipped by the walls of the mission space, resulting in a larger percentage of covered area.
 
-Both configurations obtained for 3 agents in the Rectworld environment exhibit the same problematic behavior. Moving the entire swarm in the north-east direction would yield higher percentage of covered area,
+Both configurations obtained for 3 agents in the Rectworld environment exhibit the same problematic behavior. Moving the entire swarm in the north-east direction would yield a higher percentage of covered area,
 but Algorithm \ref{alg:alg1} converges with the swarm placed so that the area covered by the three agents is clipped by the mission space walls. This is due to Algorithm \ref{alg:alg1} optimizing
 the configuration of the swarm one agent at a time. In order to move the entire swarm to the north-east direction, all agents would have to move in the north-east direction, and they
 would have to do so one at a time. In the configuration shown in \figref{fig:3_agnt_bw_k_1_0_k_2_1_distr} no single agent would increase their local objective by moving, although they would all benefit from each other moving.

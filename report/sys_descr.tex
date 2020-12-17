@@ -1,7 +1,6 @@
-\section{System Description}
 
-\subsection{Notation}
-For ease of the reader a brief summary of the notation and mathematical operators used are presented below.
+\section{Nomenclature}
+For ease of the reader, a summary of the notation and mathematical operators used are presented below.
 \begin{itemize}
   \item $\Omega$: Mission space.
   \item $\mathcal{O}$: Set of obstacles inside the mission space.
@@ -9,13 +8,17 @@ For ease of the reader a brief summary of the notation and mathematical operator
   \item $\mathbf{x}_{a}$: Position of agent $a$.
   \item $r_{a}$: Maximum communication range of agent $a$.
   \item $\hat{p}(\mathbf{x}_{a}, \mathbf{y})$: Local probability of agent $a$ wrt. point $\mathbf{y}$.
+  \item $D_{a}$: Communication disk of agent $a$.
   \item $V_{a}$: Visible set of agent $a$.
   \item $U_{a}$: Invisible set of agent $a$.
+  \item $\mathcal{B}_{a}$: Neighbors of agent $a$.
+  \item $\mathcal{C}_{a}$: Participants in the swarm who are not neighbors of agent $a$.
   \item $\mathbf{X}_{\mathcal{S}}$: Positions of all agents in the swarm $\mathcal{S}$.
   \item $\mathbf{X}_{\mathcal{S}, a}$: Position of participant $a$ in the swarm $\mathcal{S}$.
   \item $\Phi^{n}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
   \item $\Phi^{n^{+}}(\mathbf{X_{\mathcal{S}}}, \mathbf{y})$: Probability of $n$ or more members in the swarm $\mathcal{S}$ being able to communicate with entity at position $\mathbf{y}$.
   \item $L(\mathbf{X}_{\mathcal{B}_{a}\cap\{a\}})$: Local probability of coverage for agent $a$.
+  \item $D(\mathbf{x}_{a}, \mathbf{x}_{j})$: Proximity of agent $j$ relative to agent $a$.
   \item $H(\mathbf{X}_{\mathcal{B}_{a}\cap\{a\}})$: Local objective for agent $a$. Equal to the local probability of coverage for agent $a$ if active dispersion is not applied.
 \end{itemize}
 \begin{itemize}
@@ -33,6 +36,7 @@ For ease of the reader a brief summary of the notation and mathematical operator
 \end{itemize}
 \clearpage
 
+\section{System Description}
 \subsection{Feasible space}
 As in \cite{sun2014escaping}, a \textit{mission space}, $\Omega$, is defined as a simple polygon 
 \cite{weissteinsimplepolygon}.
